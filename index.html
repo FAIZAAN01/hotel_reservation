@@ -55,12 +55,38 @@
             overflow-y: auto;
         }
 
-        .editor-container h2 {
+        .sidebar-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid var(--primary-blue);
+            padding-bottom: 6px;
+            margin-bottom: 12px;
+        }
+
+        .sidebar-top h2 {
             color: var(--primary-blue);
             font-size: 18px;
-            margin-bottom: 12px;
-            border-bottom: 2px solid var(--primary-blue);
-            padding-bottom: 5px;
+            margin: 0;
+        }
+
+        .btn-settings {
+            background: var(--light-gray);
+            border: 1px solid #ccc;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 12px;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            transition: all 0.2s;
+        }
+
+        .btn-settings:hover {
+            background: #d8d8d8;
+            border-color: #999;
         }
 
         .section-title {
@@ -189,6 +215,81 @@
         }
 
         /* =========================================
+           SETTINGS MODAL
+           ========================================= */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.6);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+
+        .modal-content {
+            background: #fff;
+            border-radius: 8px;
+            padding: 22px;
+            width: 90%;
+            max-width: 480px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.4);
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid var(--primary-blue);
+            padding-bottom: 6px;
+        }
+
+        .modal-header h3 {
+            color: var(--primary-blue);
+            font-size: 16px;
+        }
+
+        .btn-close-modal {
+            background: transparent;
+            border: none;
+            font-size: 20px;
+            font-weight: bold;
+            color: #666;
+            cursor: pointer;
+        }
+
+        .btn-close-modal:hover {
+            color: #000;
+        }
+
+        .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .btn-save-modal {
+            background: var(--primary-blue);
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            padding: 8px 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .btn-save-modal:hover {
+            background: var(--primary-dark);
+        }
+
+        /* =========================================
            2. VOUCHER PREVIEW CONTAINER
            ========================================= */
         .preview-wrapper {
@@ -207,7 +308,6 @@
             gap: 10px;
         }
 
-        /* Base card styling */
         .doc-section-card {
             border: 2px solid var(--border-blue);
             border-radius: 8px;
@@ -218,17 +318,15 @@
             gap: 7px;
         }
 
-        /* =========================================
-           SECTION 1: ACCOMMODATION MAIN CARD
-           ========================================= */
         .header {
             text-align: center;
             margin-bottom: 0px;
         }
 
         .header img {
-            max-width: 120px;
-            height: auto;
+            max-width: 80px;
+            max-height: 50px;
+            object-fit: contain;
             display: inline-block;
             margin-bottom: 0px;
         }
@@ -245,7 +343,6 @@
             font-family: 'Times New Roman', Times, serif;
         }
 
-        /* Booking Date / Ref Row */
         .booking-info-row {
             display: flex;
             justify-content: space-between;
@@ -269,7 +366,6 @@
             color: #000;
         }
 
-        /* Solid Blue Section Bars */
         .blue-bar {
             background-color: var(--primary-blue);
             border-radius: var(--pill-radius);
@@ -300,7 +396,6 @@
             text-transform: none;
         }
 
-        /* Hotel Details Box */
         .hotel-box {
             background-color: var(--light-gray);
             border-radius: 6px;
@@ -334,7 +429,6 @@
             font-family: 'Times New Roman', Times, serif;
         }
 
-        /* Stats Grid */
         .stats-grid {
             display: grid;
             grid-template-columns: 1.1fr 1.15fr 0.9fr 0.85fr;
@@ -353,7 +447,6 @@
             background: #fff;
         }
 
-        /* Guest Details Table */
         .guest-row-container {
             display: flex;
             flex-direction: column;
@@ -403,12 +496,8 @@
 
         .guest-data-cell.center {
             justify-content: center;
-            font-family: 'Times New Roman', Times, serif;
         }
 
-        /* =========================================
-           SECTION 2: REMARKS & POLICIES CARD
-           ========================================= */
         .remarks-card {
             padding: 10px 14px;
             gap: 4px;
@@ -460,18 +549,6 @@
             margin-bottom: 0;
         }
 
-        .legal-text strong {
-            font-family: 'Times New Roman', Times, serif;
-        }
-
-        .legal-text em {
-            font-family: 'Times New Roman', Times, serif;
-            font-style: italic;
-        }
-
-        /* =========================================
-           SECTION 3: FOOTER COMPANY DETAILS
-           ========================================= */
         .company-footer {
             border: 1.5px solid var(--border-blue);
             border-radius: 6px;
@@ -492,6 +569,7 @@
 
         .footer-logo-img {
             max-height: 48px;
+            max-width: 70px;
             width: auto;
             display: block;
             object-fit: contain;
@@ -526,6 +604,10 @@
             text-decoration: underline;
         }
 
+        .guest-input-row .g-name {
+            text-transform: uppercase;
+        }
+
         /* =========================================
            3. A4 VECTOR PRINT STYLES
            ========================================= */
@@ -542,7 +624,7 @@
                 display: block !important;
             }
 
-            .editor-container {
+            .editor-container, .modal-overlay {
                 display: none !important;
             }
 
@@ -609,7 +691,11 @@
 
     <div class="main-wrapper">
         <aside class="editor-container">
-            <h2>Voucher Editor</h2>
+            <div class="sidebar-top">
+                <h2>Voucher Editor</h2>
+                <button type="button" class="btn-settings" onclick="openSettingsModal()">⚙️ Settings</button>
+            </div>
+
             <form id="voucherForm" onsubmit="event.preventDefault();">
                 <div class="form-grid">
                     <div class="section-title">General Booking</div>
@@ -658,10 +744,31 @@
                     <div class="section-title">Special Remarks</div>
                     <div class="form-group full-width">
                         <label for="inputSpecialRemarks">Custom Service Remarks</label>
-                        <textarea id="inputSpecialRemarks">All extras to be paid direct to Hotel/the Service Provider.</textarea>
+                        <textarea id="inputSpecialRemarks">All extras to be paid direct to **Hotel/the Service Provider.**</textarea>
                     </div>
+                </div>
 
-                    <div class="section-title">Company Footer Details</div>
+                <div class="btn-actions">
+                    <button type="button" class="btn-print" onclick="triggerCustomPrint()">
+                        <span>🖨️ Save as PDF / Print</span>
+                    </button>
+                </div>
+            </form>
+        </aside>
+
+        <!-- Company Settings Modal -->
+        <div class="modal-overlay" id="settingsModal" onclick="closeModalOnOverlay(event)">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>Company Profile Settings</h3>
+                    <button type="button" class="btn-close-modal" onclick="closeSettingsModal()">×</button>
+                </div>
+                
+                <div class="form-grid">
+                    <div class="form-group full-width">
+                        <label for="inputCompanyLogo">Company Logo</label>
+                        <input type="file" id="inputCompanyLogo" accept="image/*" onchange="handleLogoUpload(event)">
+                    </div>
                     <div class="form-group full-width">
                         <label for="inputCompanyName">Company Name</label>
                         <input type="text" id="inputCompanyName" value="Simba Voyages Ltd">
@@ -680,19 +787,17 @@
                     </div>
                 </div>
 
-                <div class="btn-actions">
-                    <button type="button" class="btn-print" onclick="triggerCustomPrint()">
-                        <span>🖨️ Save as PDF / Print</span>
-                    </button>
+                <div class="modal-footer">
+                    <button type="button" class="btn-save-modal" onclick="saveSettings()">Save Changes</button>
                 </div>
-            </form>
-        </aside>
+            </div>
+        </div>
 
         <div class="preview-wrapper">
             <main id="voucher-document">
                 <section class="doc-section-card">
                     <div class="header">
-                        <img src="simba_voyages.jpg" alt="Simba Voyages Logo" onerror="this.src='simba_voyages.jpg'">
+                        <img id="headerLogo" src="simba voyages.jpg" alt="Company Logo" onerror="this.src='simba_voyages.jpg'">
                         <h1 class="title">ACCOMMODATION DETAILS</h1>
                     </div>
 
@@ -781,7 +886,7 @@
 
                 <footer class="company-footer">
                     <div class="footer-logo-wrapper">
-                        <img src="simba voyages.jpg" alt="Simba Logo Emblem" class="footer-logo-img" onerror="this.src='image_9aa022.png'">
+                        <img id="footerLogo" src="simba voyages.jpg" alt="Company Logo" class="footer-logo-img" onerror="this.src='image_9aa022.png'">
                         <div class="footer-company-name" id="dispCompanyName">Simba Voyages Ltd</div>
                     </div>
                     <div class="footer-info">
@@ -847,20 +952,12 @@
         const singleBindings = [
             { input: 'inputBookingDate', display: 'dispBookingDate', formatter: formatLongDate },
             { input: 'inputBookingRef', display: 'dispBookingRef' },
-            { input: 'inputHotelName', display: 'dispHotelName' },
-            { input: 'inputAddress', display: 'dispAddress' },
+            { input: 'inputHotelName', display: 'dispHotelName', action: (val) => localStorage.setItem('saved_hotel_name', val) },
+            { input: 'inputAddress', display: 'dispAddress', action: (val) => localStorage.setItem('saved_hotel_address', val) },
             { input: 'inputCheckIn', display: 'dispCheckIn', formatter: formatSlashDate, action: calculateNights },
             { input: 'inputCheckOut', display: 'dispCheckOut', formatter: formatSlashDate, action: calculateNights },
             { input: 'inputNights', display: 'dispNights', formatter: padTwo },
-            { input: 'inputRooms', display: 'dispRooms', formatter: padTwo },
-            { input: 'inputSpecialRemarks', display: 'dispSpecialRemarks' },
-            { input: 'inputCompanyName', display: 'dispCompanyName' },
-            { input: 'inputCompanyAddress', display: 'dispCompanyAddress' },
-            { input: 'inputCompanyPhone', display: 'dispCompanyPhone' },
-            { input: 'inputCompanyWebsite', display: 'dispCompanyWebsite', action: (val) => {
-                const link = document.getElementById('dispCompanyWebsite');
-                link.href = val.startsWith('http') ? val : `https://${val}`;
-            }}
+            { input: 'inputRooms', display: 'dispRooms', formatter: padTwo }
         ];
 
         singleBindings.forEach(({ input, display, formatter, action }) => {
@@ -874,9 +971,57 @@
             }
         });
 
+        // --- Custom Remarks: Bold Parser & Ctrl+B Shortcut ---
+        const remarksInput = document.getElementById('inputSpecialRemarks');
+        const remarksDisp = document.getElementById('dispSpecialRemarks');
+
+        function parseRemarksMarkdown(text) {
+            const escaped = text
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;');
+            return escaped
+                .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                .replace(/\n/g, '<br>');
+        }
+
+        function updateRemarksDisplay() {
+            remarksDisp.innerHTML = parseRemarksMarkdown(remarksInput.value);
+        }
+
+        remarksInput.addEventListener('input', updateRemarksDisplay);
+
+        remarksInput.addEventListener('keydown', function (e) {
+            if ((e.ctrlKey || e.metaKey) && (e.key === 'b' || e.key === 'B')) {
+                e.preventDefault();
+                const start = this.selectionStart;
+                const end = this.selectionEnd;
+                const val = this.value;
+
+                if (start === end) {
+                    this.setRangeText('****', start, end, 'end');
+                    this.selectionStart = this.selectionEnd = start + 2;
+                } else {
+                    const selectedText = val.substring(start, end);
+                    if (selectedText.startsWith('**') && selectedText.endsWith('**') && selectedText.length >= 4) {
+                        const unwrapped = selectedText.slice(2, -2);
+                        this.setRangeText(unwrapped, start, end, 'select');
+                    } else {
+                        this.setRangeText(`**${selectedText}**`, start, end, 'select');
+                    }
+                }
+                updateRemarksDisplay();
+            }
+        });
+
+        // --- Guests Management (Empty room type default & localStorage saved) ---
         let guests = [
-            { room: "1.", name: "Mr. FAIZAAN BHATI", type: "PREMIUM" }
+            { room: "1.", name: "Mr. FAIZAAN BHATI", type: "" }
         ];
+
+        function saveGuests() {
+            localStorage.setItem('saved_voucher_guests', JSON.stringify(guests));
+        }
 
         function renderGuests() {
             const inputContainer = document.getElementById('guestInputsContainer');
@@ -891,7 +1036,7 @@
                 row.innerHTML = `
                     <input type="text" class="g-num" value="${g.room}" placeholder="#" oninput="updateGuest(${index}, 'room', this.value)">
                     <input type="text" class="g-name" value="${g.name}" placeholder="Guest Name" oninput="updateGuest(${index}, 'name', this.value)">
-                    <input type="text" class="g-type" list="roomTypeSuggestions" value="${g.type}" placeholder="Room Type" oninput="updateGuest(${index}, 'type', this.value)">
+                    <input type="text" class="g-type" list="roomTypeSuggestions" value="${g.type}" placeholder="Select room type..." oninput="updateGuest(${index}, 'type', this.value)">
                     ${guests.length > 1 ? `<button type="button" class="btn-remove" onclick="removeGuestRow(${index})">×</button>` : '<div></div>'}
                 `;
                 inputContainer.appendChild(row);
@@ -910,48 +1055,174 @@
         }
 
         function updateGuest(index, key, val) {
+            // Automatically force uppercase if editing guest name
+            if (key === 'name') {
+                val = val.toUpperCase();
+                
+                // Keep the input field itself synced in uppercase
+                const inputContainer = document.getElementById('guestInputsContainer');
+                const activeInput = inputContainer.children[index]?.querySelector('.g-name');
+                if (activeInput && activeInput.value !== val) {
+                    const start = activeInput.selectionStart;
+                    const end = activeInput.selectionEnd;
+                    activeInput.value = val;
+                    activeInput.setSelectionRange(start, end);
+                }
+            }
+
             guests[index][key] = val;
             const displayContainer = document.getElementById('guestDisplayContainer');
             const targetRow = displayContainer.children[index];
             if (targetRow) {
                 if (key === 'room') {
-                    targetRow.children[0].textContent = val;
+                    targetRow.children[0].innerHTML = val || '&nbsp;';
                     updateRoomAndGuestCounts();
                 }
-                if (key === 'name') targetRow.children[1].textContent = val;
-                if (key === 'type') targetRow.children[2].textContent = val;
+                if (key === 'name') targetRow.children[1].innerHTML = val || '&nbsp;';
+                if (key === 'type') targetRow.children[2].innerHTML = val || '&nbsp;';
             }
+            saveGuests();
         }
 
         function addGuestRow() {
-            guests.push({ room: `${guests.length + 1}.`, name: '', type: 'PREMIUM' });
+            guests.push({ room: `${guests.length + 1}.`, name: '', type: '' });
             renderGuests();
+            saveGuests();
         }
 
         function removeGuestRow(index) {
             guests.splice(index, 1);
             renderGuests();
+            saveGuests();
         }
 
+        /* Dynamic PDF Filename Printing */
         function triggerCustomPrint() {
             const originalTitle = document.title;
+            const firstGuest = guests[0]?.name?.trim();
+            const guestTitle = firstGuest ? firstGuest : "Guest";
 
-            // Pick the primary guest's name, or fallback if empty
-            const firstGuestName = guests[0]?.name?.trim();
-            const guestTitle = firstGuestName ? firstGuestName : "Guest";
-
-            // Set title to desired PDF filename format
             document.title = `${guestTitle} Hotel Reservation`;
-
-            // Trigger browser print/save-as-pdf dialog
             window.print();
-
-            // Restore original document title
             document.title = originalTitle;
         }
 
+        /* =========================================
+           SETTINGS & LOCALSTORAGE PERSISTENCE
+           ========================================= */
+        function openSettingsModal() {
+            document.getElementById('settingsModal').style.display = 'flex';
+        }
+
+        function closeSettingsModal() {
+            document.getElementById('settingsModal').style.display = 'none';
+        }
+
+        function closeModalOnOverlay(e) {
+            if (e.target.id === 'settingsModal') {
+                closeSettingsModal();
+            }
+        }
+
+        function handleLogoUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const base64Logo = e.target.result;
+                document.getElementById('headerLogo').src = base64Logo;
+                document.getElementById('footerLogo').src = base64Logo;
+                localStorage.setItem('saved_voucher_logo', base64Logo);
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function saveSettings() {
+            const companyData = {
+                name: document.getElementById('inputCompanyName').value,
+                address: document.getElementById('inputCompanyAddress').value,
+                phone: document.getElementById('inputCompanyPhone').value,
+                website: document.getElementById('inputCompanyWebsite').value
+            };
+
+            localStorage.setItem('saved_voucher_company', JSON.stringify(companyData));
+            applyCompanyData(companyData);
+            closeSettingsModal();
+        }
+
+        function applyCompanyData(data) {
+            if (!data) return;
+            if (data.name) {
+                document.getElementById('inputCompanyName').value = data.name;
+                document.getElementById('dispCompanyName').textContent = data.name;
+            }
+            if (data.address) {
+                document.getElementById('inputCompanyAddress').value = data.address;
+                document.getElementById('dispCompanyAddress').textContent = data.address;
+            }
+            if (data.phone) {
+                document.getElementById('inputCompanyPhone').value = data.phone;
+                document.getElementById('dispCompanyPhone').textContent = data.phone;
+            }
+            if (data.website) {
+                document.getElementById('inputCompanyWebsite').value = data.website;
+                const link = document.getElementById('dispCompanyWebsite');
+                link.textContent = data.website;
+                link.href = data.website.startsWith('http') ? data.website : `https://${data.website}`;
+            }
+        }
+
+        function loadSavedData() {
+            // Load saved company details
+            const savedCompany = localStorage.getItem('saved_voucher_company');
+            if (savedCompany) {
+                try {
+                    applyCompanyData(JSON.parse(savedCompany));
+                } catch (err) {
+                    console.error("Failed to parse company settings:", err);
+                }
+            }
+
+            // Load saved company logo
+            const savedLogo = localStorage.getItem('saved_voucher_logo');
+            if (savedLogo) {
+                document.getElementById('headerLogo').src = savedLogo;
+                document.getElementById('footerLogo').src = savedLogo;
+            }
+
+            // Load saved Hotel Name & Address
+            const savedHotel = localStorage.getItem('saved_hotel_name');
+            if (savedHotel !== null) {
+                document.getElementById('inputHotelName').value = savedHotel;
+                document.getElementById('dispHotelName').textContent = savedHotel;
+            }
+
+            const savedAddress = localStorage.getItem('saved_hotel_address');
+            if (savedAddress !== null) {
+                document.getElementById('inputAddress').value = savedAddress;
+                document.getElementById('dispAddress').textContent = savedAddress;
+            }
+
+            // Load saved Guests
+            const savedGuests = localStorage.getItem('saved_voucher_guests');
+            if (savedGuests) {
+                try {
+                    const parsedGuests = JSON.parse(savedGuests);
+                    if (Array.isArray(parsedGuests) && parsedGuests.length > 0) {
+                        guests = parsedGuests;
+                    }
+                } catch (err) {
+                    console.error("Failed to parse saved guests:", err);
+                }
+            }
+        }
+
+        // Initialize Everything
+        loadSavedData();
         renderGuests();
         calculateNights();
+        updateRemarksDisplay();
     </script>
 </body>
 </html>
