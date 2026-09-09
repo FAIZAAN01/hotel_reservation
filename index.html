@@ -1,0 +1,957 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Accommodation Details Voucher</title>
+    <style>
+        :root {
+            --primary-blue: #0056b3;
+            --primary-dark: #004085;
+            --light-gray: #e6e6e6;
+            --border-blue: #0056b3;
+            --pill-radius: 20px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Times New Roman', Times, Georgia, serif;
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+        }
+
+        body {
+            background-color: #2b2b2b;
+            min-height: 100vh;
+            padding: 25px 15px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .main-wrapper {
+            display: flex;
+            gap: 25px;
+            width: 100%;
+            max-width: 1350px;
+            align-items: flex-start;
+        }
+
+        /* =========================================
+           1. FORM SIDEBAR (HIDDEN ON PRINT)
+           ========================================= */
+        .editor-container {
+            flex: 1;
+            min-width: 320px;
+            max-width: 420px;
+            background: #ffffff;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            position: sticky;
+            top: 20px;
+            max-height: calc(100vh - 40px);
+            overflow-y: auto;
+        }
+
+        .editor-container h2 {
+            color: var(--primary-blue);
+            font-size: 18px;
+            margin-bottom: 12px;
+            border-bottom: 2px solid var(--primary-blue);
+            padding-bottom: 5px;
+        }
+
+        .section-title {
+            font-size: 11px;
+            font-weight: bold;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin: 10px 0 4px;
+            grid-column: span 2;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+        }
+
+        .form-group.full-width {
+            grid-column: span 2;
+        }
+
+        .form-group label {
+            font-size: 11px;
+            font-weight: bold;
+            color: #333;
+            text-transform: uppercase;
+        }
+
+        .form-group input, .form-group textarea {
+            padding: 6px 8px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 12px;
+            outline: none;
+            background: #fff;
+            font-family: 'Times New Roman', Times, serif;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 42px;
+        }
+
+        .form-group input:focus, .form-group textarea:focus {
+            border-color: var(--primary-blue);
+        }
+
+        .guest-inputs-wrapper {
+            grid-column: span 2;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            margin-top: 4px;
+        }
+
+        .guest-input-row {
+            display: grid;
+            grid-template-columns: 45px 1.4fr 1.3fr 26px;
+            gap: 5px;
+            align-items: center;
+        }
+
+        .guest-input-row input {
+            padding: 5px 6px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 11px;
+            font-family: 'Times New Roman', Times, serif;
+        }
+
+        .guest-input-row .g-num { text-align: center; }
+
+        .btn-remove {
+            background: #d9534f;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            height: 26px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .btn-add-guest {
+            background: #28a745;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            padding: 6px 10px;
+            font-size: 11px;
+            font-weight: bold;
+            cursor: pointer;
+            align-self: flex-start;
+            margin-top: 4px;
+        }
+
+        .btn-actions {
+            margin-top: 14px;
+        }
+
+        .btn-print {
+            width: 100%;
+            padding: 12px;
+            background-color: var(--primary-blue);
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn-print:hover {
+            background-color: var(--primary-dark);
+        }
+
+        /* =========================================
+           2. VOUCHER PREVIEW CONTAINER
+           ========================================= */
+        .preview-wrapper {
+            display: flex;
+            justify-content: center;
+        }
+
+        #voucher-document {
+            background-color: #ffffff;
+            width: 760px;
+            box-sizing: border-box;
+            padding: 14px 16px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        /* Base card styling */
+        .doc-section-card {
+            border: 2px solid var(--border-blue);
+            border-radius: 8px;
+            padding: 12px 14px;
+            background: #ffffff;
+            display: flex;
+            flex-direction: column;
+            gap: 7px;
+        }
+
+        /* =========================================
+           SECTION 1: ACCOMMODATION MAIN CARD
+           ========================================= */
+        .header {
+            text-align: center;
+            margin-bottom: 0px;
+        }
+
+        .header img {
+            max-width: 120px;
+            height: auto;
+            display: inline-block;
+            margin-bottom: 0px;
+        }
+
+        .title {
+            color: var(--primary-blue);
+            font-size: 18px;
+            font-weight: 900;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            text-align: center;
+            margin-top: 2px;
+            margin-bottom: 6px;
+            font-family: 'Times New Roman', Times, serif;
+        }
+
+        /* Booking Date / Ref Row */
+        .booking-info-row {
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+            margin-bottom: 1px;
+        }
+
+        .pill-badge {
+            border: 2px solid var(--border-blue);
+            border-radius: var(--pill-radius);
+            padding: 3px 14px;
+            background: #fff;
+            display: inline-flex;
+            align-items: center;
+        }
+
+        .pill-badge span {
+            font-size: 12.5px;
+            font-family: 'Times New Roman', Times, serif;
+            font-weight: bold;
+            color: #000;
+        }
+
+        /* Solid Blue Section Bars */
+        .blue-bar {
+            background-color: var(--primary-blue);
+            border-radius: var(--pill-radius);
+            padding: 2px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            min-height: 29px;
+        }
+
+        .white-pill-tag {
+            background: #fff;
+            padding: 3px 16px;
+            border-radius: var(--pill-radius);
+            font-weight: 800;
+            font-size: 11.5px;
+            letter-spacing: 0.4px;
+            text-transform: uppercase;
+            font-family: 'Times New Roman', Times, serif;
+            white-space: nowrap;
+            display: flex;
+            align-items: center;
+            height: 25px;
+            color: #000;
+        }
+
+        .white-pill-tag.mixed-case {
+            text-transform: none;
+        }
+
+        /* Hotel Details Box */
+        .hotel-box {
+            background-color: var(--light-gray);
+            border-radius: 6px;
+            padding: 7px 12px;
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+        }
+
+        .accent-pill {
+            width: 9px;
+            height: 36px;
+            background-color: var(--primary-blue);
+            border-radius: 4px;
+            flex-shrink: 0;
+        }
+
+        .hotel-text .hotel-name {
+            font-family: 'Times New Roman', Times, serif;
+            font-style: italic;
+            font-size: 16.5px;
+            color: #000;
+            font-weight: bold;
+            line-height: 1.15;
+        }
+
+        .hotel-text .hotel-address {
+            font-size: 10.5px;
+            color: #555;
+            margin-top: 2px;
+            font-family: 'Times New Roman', Times, serif;
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1.1fr 1.15fr 0.9fr 0.85fr;
+            gap: 5px;
+        }
+
+        .stat-item {
+            border: 1.8px solid var(--border-blue);
+            border-radius: var(--pill-radius);
+            text-align: center;
+            padding: 3.5px 2px;
+            font-size: 11px;
+            font-weight: bold;
+            font-family: 'Times New Roman', Times, serif;
+            white-space: nowrap;
+            background: #fff;
+        }
+
+        /* Guest Details Table */
+        .guest-row-container {
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+        }
+
+        .guest-table-header, .guest-table-row {
+            display: grid;
+            grid-template-columns: 75px 1fr 190px;
+            gap: 5px;
+        }
+
+        .guest-header-cell {
+            background-color: var(--light-gray);
+            border-radius: 5px;
+            padding: 3px 8px;
+            font-weight: bold;
+            font-size: 11.5px;
+            font-family: 'Times New Roman', Times, serif;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            height: 24px;
+        }
+
+        .guest-header-cell .mini-pill {
+            width: 8px;
+            height: 15px;
+            background-color: var(--primary-blue);
+            border-radius: 3px;
+            flex-shrink: 0;
+        }
+
+        .guest-data-cell {
+            border: 1.5px solid var(--border-blue);
+            border-radius: 5px;
+            padding: 4px 8px;
+            font-size: 11.5px;
+            font-family: 'Times New Roman', Times, serif;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            background: #fff;
+            min-height: 26px;
+            word-break: break-word;
+        }
+
+        .guest-data-cell.center {
+            justify-content: center;
+            font-family: 'Times New Roman', Times, serif;
+        }
+
+        /* =========================================
+           SECTION 2: REMARKS & POLICIES CARD
+           ========================================= */
+        .remarks-card {
+            padding: 10px 14px;
+            gap: 4px;
+        }
+
+        .section-header-blue {
+            color: var(--primary-blue);
+            font-size: 20px;
+            font-weight: 800;
+            text-align: center;
+            font-family: 'Times New Roman', Times, serif;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 2px;
+        }
+
+        .section-header-sub {
+            color: var(--primary-blue);
+            font-size: 20px;
+            font-weight: 800;
+            text-align: center;
+            margin: 6px 0 2px 0;
+            font-family: 'Times New Roman', Times, serif;
+            letter-spacing: 0.5px;
+        }
+
+        .legal-block-title {
+            color: var(--primary-blue);
+            font-size: 14px;
+            font-weight: bold;
+            font-style: italic;
+            font-family: 'Times New Roman', Times, serif;
+            margin-top: 3px;
+        }
+
+        .legal-text {
+            font-family: 'Times New Roman', Times, serif;
+            font-size: 12px;
+            line-height: 1.4;
+            color: #111;
+            text-align: justify;
+        }
+
+        .legal-text p {
+            margin-bottom: 4px;
+        }
+
+        .legal-text p:last-child {
+            margin-bottom: 0;
+        }
+
+        .legal-text strong {
+            font-family: 'Times New Roman', Times, serif;
+        }
+
+        .legal-text em {
+            font-family: 'Times New Roman', Times, serif;
+            font-style: italic;
+        }
+
+        /* =========================================
+           SECTION 3: FOOTER COMPANY DETAILS
+           ========================================= */
+        .company-footer {
+            border: 1.5px solid var(--border-blue);
+            border-radius: 6px;
+            padding: 8px 14px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+            background: #fafafa;
+        }
+
+        .footer-logo-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-shrink: 0;
+        }
+
+        .footer-logo-img {
+            max-height: 48px;
+            width: auto;
+            display: block;
+            object-fit: contain;
+        }
+
+        .footer-company-name {
+            font-size: 15px;
+            font-weight: bold;
+            color: var(--primary-blue);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-family: 'Times New Roman', Times, serif;
+        }
+
+        .footer-info {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            text-align: right;
+            font-size: 11px;
+            color: #333;
+            font-family: 'Times New Roman', Times, serif;
+        }
+
+        .footer-info a {
+            color: var(--primary-blue);
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .footer-info a:hover {
+            text-decoration: underline;
+        }
+
+        /* =========================================
+           3. A4 VECTOR PRINT STYLES
+           ========================================= */
+        @page {
+            size: A4 portrait;
+            margin: 6mm;
+        }
+
+        @media print {
+            body {
+                background: #ffffff !important;
+                padding: 0 !important;
+                margin: 0 !important;
+                display: block !important;
+            }
+
+            .editor-container {
+                display: none !important;
+            }
+
+            .main-wrapper {
+                display: block !important;
+                width: 100% !important;
+                max-width: 100% !important;
+            }
+
+            .preview-wrapper {
+                display: block !important;
+                width: 100% !important;
+            }
+
+            #voucher-document {
+                width: 100% !important;
+                max-width: 100% !important;
+                box-shadow: none !important;
+                padding: 4mm 4mm !important;
+                margin: 0 auto !important;
+                page-break-inside: avoid;
+                gap: 8px !important;
+            }
+
+            .doc-section-card {
+                border: 2px solid var(--border-blue) !important;
+                border-radius: 6px !important;
+                page-break-inside: avoid;
+            }
+
+            .company-footer {
+                border: 1.5px solid var(--border-blue) !important;
+                background: #fff !important;
+                page-break-inside: avoid;
+            }
+        }
+
+        @media (max-width: 1100px) {
+            .main-wrapper {
+                flex-direction: column;
+                align-items: center;
+            }
+            .editor-container {
+                position: static;
+                max-height: none;
+                width: 100%;
+                max-width: 760px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <datalist id="roomTypeSuggestions">
+        <option value="PREMIUM"></option>
+        <option value="Executive Double Suite"></option>
+        <option value="STANDARD"></option>
+        <option value="DELUXE"></option>
+        <option value="EXECUTIVE SUITE"></option>
+        <option value="SUPERIOR ROOM"></option>
+        <option value="KING ROOM"></option>
+        <option value="TWIN ROOM"></option>
+    </datalist>
+
+    <div class="main-wrapper">
+        <aside class="editor-container">
+            <h2>Voucher Editor</h2>
+            <form id="voucherForm" onsubmit="event.preventDefault();">
+                <div class="form-grid">
+                    <div class="section-title">General Booking</div>
+                    <div class="form-group">
+                        <label for="inputBookingDate">Booking Date</label>
+                        <input type="date" id="inputBookingDate">
+                    </div>
+                    <div class="form-group">
+                        <label for="inputBookingRef">Booking Ref.</label>
+                        <input type="text" id="inputBookingRef" value="330272558">
+                    </div>
+
+                    <div class="section-title">Hotel Info</div>
+                    <div class="form-group full-width">
+                        <label for="inputHotelName">Hotel Name</label>
+                        <input type="text" id="inputHotelName" value="The Ritz Carlton">
+                    </div>
+                    <div class="form-group full-width">
+                        <label for="inputAddress">Address / Location</label>
+                        <input type="text" id="inputAddress" value="Moscow, Russia">
+                    </div>
+
+                    <div class="section-title">Stay Dates & Units</div>
+                    <div class="form-group">
+                        <label for="inputCheckIn">Check-in Date</label>
+                        <input type="date" id="inputCheckIn">
+                    </div>
+                    <div class="form-group">
+                        <label for="inputCheckOut">Check-out Date</label>
+                        <input type="date" id="inputCheckOut">
+                    </div>
+                    <div class="form-group">
+                        <label for="inputNights">No. of Nights</label>
+                        <input type="number" id="inputNights" min="1" value="3">
+                    </div>
+                    <div class="form-group">
+                        <label for="inputRooms">No. of Rooms</label>
+                        <input type="number" id="inputRooms" min="1" value="1">
+                    </div>
+
+                    <div class="section-title">Guests</div>
+                    <div class="guest-inputs-wrapper" id="guestInputsContainer"></div>
+                    
+                    <button type="button" class="btn-add-guest" onclick="addGuestRow()">+ Add Guest Row</button>
+
+                    <div class="section-title">Special Remarks</div>
+                    <div class="form-group full-width">
+                        <label for="inputSpecialRemarks">Custom Service Remarks</label>
+                        <textarea id="inputSpecialRemarks">All extras to be paid direct to Hotel/the Service Provider.</textarea>
+                    </div>
+
+                    <div class="section-title">Company Footer Details</div>
+                    <div class="form-group full-width">
+                        <label for="inputCompanyName">Company Name</label>
+                        <input type="text" id="inputCompanyName" value="Simba Voyages Ltd">
+                    </div>
+                    <div class="form-group full-width">
+                        <label for="inputCompanyAddress">Address</label>
+                        <input type="text" id="inputCompanyAddress" value="Kigali, Rwanda">
+                    </div>
+                    <div class="form-group">
+                        <label for="inputCompanyPhone">Phone</label>
+                        <input type="text" id="inputCompanyPhone" value="+250 788 000 000">
+                    </div>
+                    <div class="form-group">
+                        <label for="inputCompanyWebsite">Website</label>
+                        <input type="text" id="inputCompanyWebsite" value="www.simbavoyages.com">
+                    </div>
+                </div>
+
+                <div class="btn-actions">
+                    <button type="button" class="btn-print" onclick="triggerCustomPrint()">
+                        <span>🖨️ Save as PDF / Print</span>
+                    </button>
+                </div>
+            </form>
+        </aside>
+
+        <div class="preview-wrapper">
+            <main id="voucher-document">
+                <section class="doc-section-card">
+                    <div class="header">
+                        <img src="simba_voyages.jpg" alt="Simba Voyages Logo" onerror="this.src='simba_voyages.jpg'">
+                        <h1 class="title">ACCOMMODATION DETAILS</h1>
+                    </div>
+
+                    <div class="booking-info-row">
+                        <div class="pill-badge">
+                            <span>Booking Date: <span id="dispBookingDate">10 August 2026</span></span>
+                        </div>
+                        <div class="pill-badge">
+                            <span>Booking Ref.: <span id="dispBookingRef">330272558</span></span>
+                        </div>
+                    </div>
+
+                    <div class="blue-bar">
+                        <div class="white-pill-tag">HOTEL INFORMATION</div>
+                    </div>
+
+                    <div class="hotel-box">
+                        <div class="accent-pill"></div>
+                        <div class="hotel-text">
+                            <div class="hotel-name" id="dispHotelName">The Ritz Carlton</div>
+                            <div class="hotel-address" id="dispAddress">Moscow, Russia</div>
+                        </div>
+                    </div>
+
+                    <div class="stats-grid">
+                        <div class="stat-item">Check-in: <span id="dispCheckIn">11/08/2026</span></div>
+                        <div class="stat-item">Check-out: <span id="dispCheckOut">14/08/2026</span></div>
+                        <div class="stat-item">No. of Nights: <span id="dispNights">03</span></div>
+                        <div class="stat-item">No. of Rooms: <span id="dispRooms">01</span></div>
+                    </div>
+
+                    <div class="blue-bar">
+                        <div class="white-pill-tag">GUEST DETAILS</div>
+                        <div class="white-pill-tag mixed-case">No. of Guests: <span id="dispGuests" style="margin-left:4px;">01</span></div>
+                    </div>
+
+                    <div class="guest-row-container">
+                        <div class="guest-table-header">
+                            <div class="guest-header-cell">
+                                <div class="mini-pill"></div>
+                                <span>Room</span>
+                            </div>
+                            <div class="guest-header-cell">
+                                <div class="mini-pill"></div>
+                                <span>Guest Name</span>
+                            </div>
+                            <div class="guest-header-cell">
+                                <div class="mini-pill"></div>
+                                <span>Room Type</span>
+                            </div>
+                        </div>
+
+                        <div id="guestDisplayContainer" style="display: flex; flex-direction: column; gap: 3px;"></div>
+                    </div>
+                </section>
+
+                <section class="doc-section-card remarks-card">
+                    <h2 class="section-header-blue">REMARKS</h2>
+                    <div class="legal-text">
+                        <p><strong><em>IMPORTANT NOTE:</em></strong> Please be informed that in some countries, there is a local tax known as "visitor's tax", "city tax", "tourist tax" (or similar name), which is not included in the booking price and is directly payable by the guest at the corresponding hotel and/or at the airport.</p>
+                        <p>Extra bed for extra person / extra child is not guaranteed, and it will be subject to hotel's policy and additional costs may apply.</p>
+                        <p><strong><em>Special Service Requests/Remarks:</em></strong><br>
+                        <span id="dispSpecialRemarks">All extras to be paid direct to <strong>Hotel/the Service Provider.</strong></span></p>
+                    </div>
+
+                    <h3 class="section-header-sub">Terms &amp; Conditions</h3>
+                    <div class="legal-text">
+                        <p>Vouchers are not transferable and valid only for the services mentioned therein. Any services not specifically confirmed and noted on vouchers will not be rendered. A valid <strong>identity proof</strong> may need to be produced along with the voucher. Any details mentioned under special remarks will be subject to request and is not confirmed. All extras to be paid directly to the hotels/the service providers. Hotels / Service providers may ask for a <strong>credit card authorization / cash deposit</strong> to cover any incidental or expenses of personal nature and must be provided with the same when required. Tampering of voucher / voucher details will result in the voucher being rejected by the service provider.</p>
+                    </div>
+
+                    <div class="legal-block-title">Passenger Comments/Complaints</div>
+                    <div class="legal-text">
+                        <p>Passengers need to contact their <strong>Travel Agent</strong>. It is imperative that any complaints be made known to the respective handling agents or its representatives without any delay so that appropriate action can be taken.</p>
+                    </div>
+
+                    <div class="legal-block-title">Cancellation/Refunds</div>
+                    <div class="legal-text">
+                        <p>For all cancellations, please contact your <strong>Travel Agent</strong>.</p>
+                    </div>
+
+                    <div class="legal-block-title">Responsibility</div>
+                    <div class="legal-text">
+                        <p>It is understood that we act as agent only for all services covered hereby. Further we shall not be responsible for any loss, injury or damage resulting from acts of God, dangers, fire, breakdown of machinery, damage resulting from acts of God, equipment or vehicles, acts of government authority, wars, civil disturbances, riots, thefts, pilferage, epidemics, quarantines or any delays or changes including any extra expenses which the passenger may incur as a result of any of the foregoing causes.</p>
+                    </div>
+                </section>
+
+                <footer class="company-footer">
+                    <div class="footer-logo-wrapper">
+                        <img src="simba voyages.jpg" alt="Simba Logo Emblem" class="footer-logo-img" onerror="this.src='image_9aa022.png'">
+                        <div class="footer-company-name" id="dispCompanyName">Simba Voyages Ltd</div>
+                    </div>
+                    <div class="footer-info">
+                        <div id="dispCompanyAddress">Kigali, Rwanda</div>
+                        <div>Tel: <span id="dispCompanyPhone">+250 788 000 000</span></div>
+                        <div>Web: <a href="https://www.simbavoyages.com" target="_blank" id="dispCompanyWebsite">www.simbavoyages.com</a></div>
+                    </div>
+                </footer>
+            </main>
+        </div>
+    </div>
+
+    <script>
+        function formatLongDate(dateStr) {
+            if (!dateStr) return '';
+            const [y, m, d] = dateStr.split('-');
+            const date = new Date(y, m - 1, d);
+            const day = date.getDate();
+            const month = date.toLocaleString('en-US', { month: 'long' });
+            const year = date.getFullYear();
+            return `${day} ${month} ${year}`;
+        }
+
+        function formatSlashDate(dateStr) {
+            if (!dateStr) return '';
+            const [y, m, d] = dateStr.split('-');
+            return `${d.padStart(2, '0')}/${m.padStart(2, '0')}/${y}`;
+        }
+
+        function padTwo(num) {
+            return String(num).padStart(2, '0');
+        }
+
+        function calculateNights() {
+            const checkInVal = document.getElementById('inputCheckIn').value;
+            const checkOutVal = document.getElementById('inputCheckOut').value;
+            if (checkInVal && checkOutVal) {
+                const start = new Date(checkInVal);
+                const end = new Date(checkOutVal);
+                const diffTime = end - start;
+                const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                const nights = diffDays > 0 ? diffDays : 0;
+                document.getElementById('inputNights').value = nights;
+                document.getElementById('dispNights').textContent = padTwo(nights);
+            }
+        }
+
+        function updateRoomAndGuestCounts() {
+            const guestCount = guests.length;
+            document.getElementById('dispGuests').textContent = padTwo(guestCount);
+
+            const uniqueRooms = new Set(guests.map(g => g.room.trim()).filter(r => r !== ''));
+            const roomCount = uniqueRooms.size || (guestCount > 0 ? 1 : 0);
+            document.getElementById('inputRooms').value = roomCount;
+            document.getElementById('dispRooms').textContent = padTwo(roomCount);
+        }
+
+        // Initialize Defaults
+        document.getElementById('inputBookingDate').value = '2026-08-10';
+        document.getElementById('inputCheckIn').value = '2026-08-11';
+        document.getElementById('inputCheckOut').value = '2026-08-14';
+
+        const singleBindings = [
+            { input: 'inputBookingDate', display: 'dispBookingDate', formatter: formatLongDate },
+            { input: 'inputBookingRef', display: 'dispBookingRef' },
+            { input: 'inputHotelName', display: 'dispHotelName' },
+            { input: 'inputAddress', display: 'dispAddress' },
+            { input: 'inputCheckIn', display: 'dispCheckIn', formatter: formatSlashDate, action: calculateNights },
+            { input: 'inputCheckOut', display: 'dispCheckOut', formatter: formatSlashDate, action: calculateNights },
+            { input: 'inputNights', display: 'dispNights', formatter: padTwo },
+            { input: 'inputRooms', display: 'dispRooms', formatter: padTwo },
+            { input: 'inputSpecialRemarks', display: 'dispSpecialRemarks' },
+            { input: 'inputCompanyName', display: 'dispCompanyName' },
+            { input: 'inputCompanyAddress', display: 'dispCompanyAddress' },
+            { input: 'inputCompanyPhone', display: 'dispCompanyPhone' },
+            { input: 'inputCompanyWebsite', display: 'dispCompanyWebsite', action: (val) => {
+                const link = document.getElementById('dispCompanyWebsite');
+                link.href = val.startsWith('http') ? val : `https://${val}`;
+            }}
+        ];
+
+        singleBindings.forEach(({ input, display, formatter, action }) => {
+            const inputEl = document.getElementById(input);
+            const dispEl = document.getElementById(display);
+            if (inputEl && dispEl) {
+                inputEl.addEventListener('input', (e) => {
+                    dispEl.textContent = formatter ? formatter(e.target.value) : e.target.value;
+                    if (action) action(e.target.value);
+                });
+            }
+        });
+
+        let guests = [
+            { room: "1.", name: "Mr. FAIZAAN BHATI", type: "PREMIUM" }
+        ];
+
+        function renderGuests() {
+            const inputContainer = document.getElementById('guestInputsContainer');
+            const displayContainer = document.getElementById('guestDisplayContainer');
+
+            inputContainer.innerHTML = '';
+            displayContainer.innerHTML = '';
+
+            guests.forEach((g, index) => {
+                const row = document.createElement('div');
+                row.className = 'guest-input-row';
+                row.innerHTML = `
+                    <input type="text" class="g-num" value="${g.room}" placeholder="#" oninput="updateGuest(${index}, 'room', this.value)">
+                    <input type="text" class="g-name" value="${g.name}" placeholder="Guest Name" oninput="updateGuest(${index}, 'name', this.value)">
+                    <input type="text" class="g-type" list="roomTypeSuggestions" value="${g.type}" placeholder="Room Type" oninput="updateGuest(${index}, 'type', this.value)">
+                    ${guests.length > 1 ? `<button type="button" class="btn-remove" onclick="removeGuestRow(${index})">×</button>` : '<div></div>'}
+                `;
+                inputContainer.appendChild(row);
+
+                const dispRow = document.createElement('div');
+                dispRow.className = 'guest-table-row';
+                dispRow.innerHTML = `
+                    <div class="guest-data-cell center">${g.room || '&nbsp;'}</div>
+                    <div class="guest-data-cell">${g.name || '&nbsp;'}</div>
+                    <div class="guest-data-cell">${g.type || '&nbsp;'}</div>
+                `;
+                displayContainer.appendChild(dispRow);
+            });
+
+            updateRoomAndGuestCounts();
+        }
+
+        function updateGuest(index, key, val) {
+            guests[index][key] = val;
+            const displayContainer = document.getElementById('guestDisplayContainer');
+            const targetRow = displayContainer.children[index];
+            if (targetRow) {
+                if (key === 'room') {
+                    targetRow.children[0].textContent = val;
+                    updateRoomAndGuestCounts();
+                }
+                if (key === 'name') targetRow.children[1].textContent = val;
+                if (key === 'type') targetRow.children[2].textContent = val;
+            }
+        }
+
+        function addGuestRow() {
+            guests.push({ room: `${guests.length + 1}.`, name: '', type: 'PREMIUM' });
+            renderGuests();
+        }
+
+        function removeGuestRow(index) {
+            guests.splice(index, 1);
+            renderGuests();
+        }
+
+        function triggerCustomPrint() {
+            const originalTitle = document.title;
+
+            // Pick the primary guest's name, or fallback if empty
+            const firstGuestName = guests[0]?.name?.trim();
+            const guestTitle = firstGuestName ? firstGuestName : "Guest";
+
+            // Set title to desired PDF filename format
+            document.title = `${guestTitle} Hotel Reservation`;
+
+            // Trigger browser print/save-as-pdf dialog
+            window.print();
+
+            // Restore original document title
+            document.title = originalTitle;
+        }
+
+        renderGuests();
+        calculateNights();
+    </script>
+</body>
+</html>
