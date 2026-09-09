@@ -8,9 +8,32 @@
         :root {
             --primary-blue: #0056b3;
             --primary-dark: #004085;
-            --light-gray: #e6e6e6;
+            --light-gray: #f7f9fb;
             --border-blue: #0056b3;
-            --pill-radius: 20px;
+            --pill-radius: 30px;
+
+            /* Configured Default Typography & Colors */
+            --fz-title: 22.5px;
+            --color-title: #0056b3;
+
+            --fz-headers: 22px;
+            --color-headers: #0056b3;
+
+            --fz-subheaders: 17px;
+            --color-subheaders: #0056b3;
+
+            --fz-body: 15px;
+            --color-body: #111111;
+
+            --fz-table: 12px;
+            --color-table: #000000;
+
+            --color-border-card: #0056b3;
+            --color-border-inner: #0056b3;
+
+            /* Watermark Variables */
+            --watermark-opacity: 0.065;
+            --watermark-size: 78px;
         }
 
         * {
@@ -23,9 +46,9 @@
         }
 
         body {
-            background-color: #2b2b2b;
+            background-color: #1e1e1e;
             min-height: 100vh;
-            padding: 25px 15px;
+            padding: 20px 15px;
             display: flex;
             justify-content: center;
         }
@@ -34,59 +57,65 @@
             display: flex;
             gap: 25px;
             width: 100%;
-            max-width: 1350px;
+            max-width: 1500px;
             align-items: flex-start;
+            justify-content: center;
         }
 
         /* =========================================
-           1. FORM SIDEBAR (HIDDEN ON PRINT)
+           1. SIDEBAR (FORM & SETTINGS)
            ========================================= */
         .editor-container {
-            flex: 1;
-            min-width: 320px;
-            max-width: 420px;
+            flex: 0 0 430px;
             background: #ffffff;
             border-radius: 10px;
-            padding: 20px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            padding: 16px;
+            box-shadow: 0 6px 25px rgba(0,0,0,0.45);
             position: sticky;
             top: 20px;
             max-height: calc(100vh - 40px);
             overflow-y: auto;
+            z-index: 10;
         }
 
-        .sidebar-top {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 2px solid var(--primary-blue);
-            padding-bottom: 6px;
+        .sidebar-tabs {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 6px;
             margin-bottom: 12px;
+            background: #f1f3f5;
+            padding: 4px;
+            border-radius: 8px;
         }
 
-        .sidebar-top h2 {
-            color: var(--primary-blue);
-            font-size: 18px;
-            margin: 0;
-        }
-
-        .btn-settings {
-            background: var(--light-gray);
-            border: 1px solid #ccc;
-            padding: 5px 10px;
-            border-radius: 5px;
+        .tab-btn {
+            padding: 7px 10px;
+            border: none;
+            background: transparent;
             font-size: 12px;
             font-weight: bold;
             cursor: pointer;
+            border-radius: 6px;
+            color: #555;
+            transition: all 0.2s;
             display: flex;
             align-items: center;
+            justify-content: center;
             gap: 5px;
-            transition: all 0.2s;
         }
 
-        .btn-settings:hover {
-            background: #d8d8d8;
-            border-color: #999;
+        .tab-btn.active {
+            background: #ffffff;
+            color: var(--primary-blue);
+            box-shadow: 0 2px 6px rgba(0,0,0,0.12);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
         }
 
         .section-title {
@@ -122,6 +151,33 @@
             text-transform: uppercase;
         }
 
+        .checkbox-group {
+            grid-column: span 2;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: #f8f9fa;
+            padding: 6px 10px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            margin-top: 2px;
+        }
+
+        .checkbox-group input[type="checkbox"] {
+            width: 16px;
+            height: 16px;
+            cursor: pointer;
+            accent-color: var(--primary-blue);
+        }
+
+        .checkbox-group label {
+            font-size: 11.5px;
+            font-weight: bold;
+            color: #222;
+            cursor: pointer;
+            text-transform: none;
+        }
+
         .form-group input, .form-group textarea {
             padding: 6px 8px;
             border: 1px solid #ccc;
@@ -151,9 +207,13 @@
 
         .guest-input-row {
             display: grid;
-            grid-template-columns: 45px 1.4fr 1.3fr 26px;
-            gap: 5px;
+            grid-template-columns: 38px 1.3fr 1.1fr 24px;
+            gap: 4px;
             align-items: center;
+        }
+
+        .guest-input-row.with-meal {
+            grid-template-columns: 34px 1.2fr 0.95fr 0.95fr 24px;
         }
 
         .guest-input-row input {
@@ -165,6 +225,10 @@
         }
 
         .guest-input-row .g-num { text-align: center; }
+
+        .guest-input-row .g-name {
+            text-transform: uppercase;
+        }
 
         .btn-remove {
             background: #d9534f;
@@ -189,18 +253,89 @@
             margin-top: 4px;
         }
 
+        /* Styles Tab Controls */
+        .style-control-row {
+            display: grid;
+            grid-template-columns: 120px 1fr 48px 34px 64px;
+            gap: 6px;
+            align-items: center;
+            padding: 5px 0;
+            border-bottom: 1px dashed #eee;
+        }
+
+        .style-control-row.border-only {
+            grid-template-columns: 120px 1fr 34px 64px;
+        }
+
+        .style-control-row.watermark-row {
+            grid-template-columns: 120px 1fr 50px;
+        }
+
+        .style-control-row label {
+            font-size: 11px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .style-control-row input[type="range"] {
+            width: 100%;
+        }
+
+        .style-control-row input[type="color"] {
+            width: 100%;
+            height: 25px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            padding: 1px;
+            cursor: pointer;
+        }
+
+        .val-badge {
+            font-family: monospace, monospace;
+            font-size: 10.5px;
+            background: #f1f3f5;
+            color: #333;
+            padding: 2px 3px;
+            border-radius: 3px;
+            text-align: center;
+            border: 1px solid #e2e4e6;
+        }
+
+        .styles-action-row {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 10px;
+        }
+
+        .btn-reset-styles {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+            border-radius: 4px;
+            padding: 6px 12px;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 11px;
+        }
+
+        .btn-reset-styles:hover {
+            background: #f1b0b7;
+        }
+
         .btn-actions {
             margin-top: 14px;
+            padding-top: 10px;
+            border-top: 1px solid #eee;
         }
 
         .btn-print {
             width: 100%;
-            padding: 12px;
+            padding: 11px;
             background-color: var(--primary-blue);
             color: #fff;
             border: none;
             border-radius: 6px;
-            font-size: 14px;
+            font-size: 13.5px;
             font-weight: bold;
             cursor: pointer;
             transition: background 0.2s;
@@ -215,318 +350,293 @@
         }
 
         /* =========================================
-           SETTINGS MODAL
-           ========================================= */
-        .modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            background: rgba(0, 0, 0, 0.6);
-            display: none;
-            justify-content: center;
-            align-items: center;
-            z-index: 9999;
-        }
-
-        .modal-content {
-            background: #fff;
-            border-radius: 8px;
-            padding: 22px;
-            width: 90%;
-            max-width: 480px;
-            box-shadow: 0 8px 30px rgba(0,0,0,0.4);
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 2px solid var(--primary-blue);
-            padding-bottom: 6px;
-        }
-
-        .modal-header h3 {
-            color: var(--primary-blue);
-            font-size: 16px;
-        }
-
-        .btn-close-modal {
-            background: transparent;
-            border: none;
-            font-size: 20px;
-            font-weight: bold;
-            color: #666;
-            cursor: pointer;
-        }
-
-        .btn-close-modal:hover {
-            color: #000;
-        }
-
-        .modal-footer {
-            display: flex;
-            justify-content: flex-end;
-            gap: 8px;
-            margin-top: 10px;
-        }
-
-        .btn-save-modal {
-            background: var(--primary-blue);
-            color: #fff;
-            border: none;
-            border-radius: 4px;
-            padding: 8px 16px;
-            font-weight: bold;
-            cursor: pointer;
-        }
-
-        .btn-save-modal:hover {
-            background: var(--primary-dark);
-        }
-
-        /* =========================================
-           2. VOUCHER PREVIEW CONTAINER
+           2. VOUCHER PREVIEW CONTAINER (EXACT A4)
            ========================================= */
         .preview-wrapper {
             display: flex;
             justify-content: center;
+            align-items: flex-start;
         }
 
         #voucher-document {
             background-color: #ffffff;
-            width: 760px;
+            width: 210mm;
+            height: 297mm;
+            max-height: 297mm;
             box-sizing: border-box;
-            padding: 14px 16px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            padding: 6mm 12mm;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.45);
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            gap: 8px;
+            overflow: hidden;
+            position: relative;
         }
 
+        /* Diagonal Watermark Layer */
+        .watermark-overlay {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(-32deg);
+            font-family: 'Times New Roman', Times, serif;
+            font-size: var(--watermark-size);
+            font-weight: 900;
+            color: #000000;
+            opacity: var(--watermark-opacity);
+            text-transform: uppercase;
+            letter-spacing: 9px;
+            white-space: nowrap;
+            pointer-events: none;
+            user-select: none;
+            z-index: 1;
+        }
+
+        /* Ensure card contents render crisp above watermark */
         .doc-section-card {
-            border: 2px solid var(--border-blue);
-            border-radius: 8px;
+            border: 2.5px solid var(--color-border-card);
+            border-radius: 4px;
             padding: 12px 14px;
-            background: #ffffff;
+            background: transparent;
             display: flex;
             flex-direction: column;
             gap: 7px;
+            position: relative;
+            z-index: 2;
         }
 
         .header {
             text-align: center;
-            margin-bottom: 0px;
+            margin-bottom: 2px;
         }
 
         .header img {
-            max-width: 80px;
-            max-height: 50px;
+            max-width: 120px;
+            max-height: 70px;
             object-fit: contain;
             display: inline-block;
             margin-bottom: 0px;
         }
 
         .title {
-            color: var(--primary-blue);
-            font-size: 18px;
-            font-weight: 900;
+            text-decoration: underline;
+            color: var(--color-title);
+            font-size: var(--fz-title);
+            font-weight: 800;
             letter-spacing: 0.5px;
             text-transform: uppercase;
             text-align: center;
-            margin-top: 2px;
-            margin-bottom: 6px;
+            margin-top: 1px;
+            margin-bottom: 4px;
             font-family: 'Times New Roman', Times, serif;
         }
 
-        .booking-info-row {
+        /* Full-Width Solid Blue Pill Bars */
+        .solid-blue-pill-bar {
+            background-color: var(--color-headers);
+            border-radius: var(--pill-radius);
+            padding: 4px 6px;
             display: flex;
-            justify-content: space-between;
-            gap: 12px;
-            margin-bottom: 1px;
+            align-items: center;
+            min-height: 38px;
         }
 
-        .pill-badge {
-            border: 2px solid var(--border-blue);
+        .solid-blue-pill-bar.space-between {
+            justify-content: space-between;
+        }
+
+        /* Inset Pill Badges */
+        .white-inset-badge {
+            background: #ffffff;
+            border: 0.5px solid #000000;
             border-radius: var(--pill-radius);
             padding: 3px 14px;
-            background: #fff;
-            display: inline-flex;
-            align-items: center;
-        }
-
-        .pill-badge span {
-            font-size: 12.5px;
+            font-size: var(--fz-table);
             font-family: 'Times New Roman', Times, serif;
             font-weight: bold;
-            color: #000;
-        }
-
-        .blue-bar {
-            background-color: var(--primary-blue);
-            border-radius: var(--pill-radius);
-            padding: 2px;
-            display: flex;
+            color: var(--color-table);
+            display: inline-flex;
             align-items: center;
-            justify-content: space-between;
-            min-height: 29px;
-        }
-
-        .white-pill-tag {
-            background: #fff;
-            padding: 3px 16px;
-            border-radius: var(--pill-radius);
-            font-weight: 800;
-            font-size: 11.5px;
-            letter-spacing: 0.4px;
-            text-transform: uppercase;
-            font-family: 'Times New Roman', Times, serif;
+            min-height: 28px;
             white-space: nowrap;
+        }
+
+        .white-inset-badge strong {
+            font-family: 'Times New Roman', Times, serif;
+            margin-right: 4px;
+        }
+
+        /* Hotel Box with Left Accent Pill */
+        .hotel-row-wrapper {
             display: flex;
-            align-items: center;
-            height: 25px;
-            color: #000;
+            align-items: stretch;
+            gap: 8px;
         }
 
-        .white-pill-tag.mixed-case {
-            text-transform: none;
-        }
-
-        .hotel-box {
-            background-color: var(--light-gray);
-            border-radius: 6px;
-            padding: 7px 12px;
-            display: flex;
-            align-items: flex-start;
-            gap: 10px;
-        }
-
-        .accent-pill {
-            width: 9px;
-            height: 36px;
-            background-color: var(--primary-blue);
-            border-radius: 4px;
+        .vertical-accent-pill {
+            width: 12px;
+            background-color: var(--color-headers);
+            border-radius: 7px;
             flex-shrink: 0;
         }
 
-        .hotel-text .hotel-name {
+        .hotel-bordered-box {
+            flex: 1;
+            border: 1px solid var(--color-border-inner);
+            border-radius: 8px;
+            padding: 6px 12px;
+            background: rgba(255, 255, 255, 0.9);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            min-height: 48px;
+        }
+
+        .hotel-bordered-box .hotel-name {
             font-family: 'Times New Roman', Times, serif;
             font-style: italic;
-            font-size: 16.5px;
-            color: #000;
+            font-size: calc(var(--fz-subheaders) + 1px);
+            color: var(--color-body);
             font-weight: bold;
             line-height: 1.15;
         }
 
-        .hotel-text .hotel-address {
-            font-size: 10.5px;
-            color: #555;
-            margin-top: 2px;
+        .hotel-bordered-box .hotel-address {
             font-family: 'Times New Roman', Times, serif;
-        }
-
-        .stats-grid {
-            display: grid;
-            grid-template-columns: 1.1fr 1.15fr 0.9fr 0.85fr;
-            gap: 5px;
-        }
-
-        .stat-item {
-            border: 1.8px solid var(--border-blue);
-            border-radius: var(--pill-radius);
-            text-align: center;
-            padding: 3.5px 2px;
-            font-size: 11px;
+            font-style: italic;
+            font-size: calc(var(--fz-body) - 2px);
+            color: #666;
             font-weight: bold;
-            font-family: 'Times New Roman', Times, serif;
-            white-space: nowrap;
-            background: #fff;
+            margin-top: 2px;
         }
 
+        /* =======================================================
+           TABLE: CAPSULES ON HEADINGS + SINGLE CARD FOR DATA ROW
+           ======================================================= */
         .guest-row-container {
             display: flex;
             flex-direction: column;
-            gap: 3px;
+            gap: 6px;
         }
 
-        .guest-table-header, .guest-table-row {
+        .guest-table-header {
             display: grid;
-            grid-template-columns: 75px 1fr 190px;
-            gap: 5px;
+            grid-template-columns: 14px 75px 14px 1fr 14px 200px;
+            gap: 6px;
+            align-items: center;
         }
 
-        .guest-header-cell {
-            background-color: var(--light-gray);
-            border-radius: 5px;
-            padding: 3px 8px;
+        .guest-table-header.with-meal {
+            grid-template-columns: 14px 65px 14px 1.25fr 14px 145px 14px 135px;
+        }
+
+        /* Individual Pill Capsules Exclusively for Headers */
+        .guest-header-capsule {
+            border: 1px solid var(--color-border-inner);
+            border-radius: 8px;
+            padding: 4px 10px;
             font-weight: bold;
-            font-size: 11.5px;
+            font-size: var(--fz-table);
+            color: var(--color-table);
             font-family: 'Times New Roman', Times, serif;
+            text-align: center;
+            background: rgba(255, 255, 255, 0.95);
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+            min-height: 30px;
             display: flex;
             align-items: center;
-            gap: 6px;
-            height: 24px;
+            justify-content: center;
+            white-space: nowrap;
+            overflow: hidden;
         }
 
-        .guest-header-cell .mini-pill {
-            width: 8px;
-            height: 15px;
-            background-color: var(--primary-blue);
-            border-radius: 3px;
+        .mini-vertical-pill {
+            width: 12px;
+            height: 30px;
+            background-color: var(--color-headers);
+            border-radius: 7px;
             flex-shrink: 0;
         }
 
-        .guest-data-cell {
-            border: 1.5px solid var(--border-blue);
-            border-radius: 5px;
-            padding: 4px 8px;
-            font-size: 11.5px;
+        /* Guest Data Rows: Continuous Card with Left Accent Pill */
+        .guest-data-row-wrapper {
+            display: flex;
+            align-items: stretch;
+            gap: 6px;
+        }
+
+        .guest-data-card {
+            flex: 1;
+            border: 1px solid var(--color-border-inner);
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.92);
+            display: grid;
+            grid-template-columns: 95px 1fr 220px;
+            min-height: 32px;
+            overflow: hidden;
+        }
+
+        .guest-data-card.with-meal {
+            grid-template-columns: 85px 1.25fr 165px 155px;
+        }
+
+        .guest-cell {
+            padding: 4px 10px;
+            font-size: var(--fz-table);
+            color: var(--color-table);
             font-family: 'Times New Roman', Times, serif;
-            font-weight: bold;
             display: flex;
             align-items: center;
-            background: #fff;
-            min-height: 26px;
             word-break: break-word;
         }
 
-        .guest-data-cell.center {
+        .guest-cell.center {
             justify-content: center;
+            font-weight: bold;
         }
 
+        .guest-cell.guest-name-cell {
+            font-weight: bold;
+            font-style: italic;
+            padding-left: 14px;
+        }
+
+        .guest-cell.category-cell {
+            justify-content: center;
+            text-align: center;
+        }
+
+        /* Remarks Section */
         .remarks-card {
-            padding: 10px 14px;
-            gap: 4px;
+            padding: 8px 12px;
+            gap: 3px;
         }
 
         .section-header-blue {
-            color: var(--primary-blue);
-            font-size: 20px;
+            color: var(--color-headers);
+            font-size: var(--fz-headers);
             font-weight: 800;
             text-align: center;
             font-family: 'Times New Roman', Times, serif;
             text-transform: uppercase;
             letter-spacing: 0.5px;
-            margin-bottom: 2px;
+            margin-bottom: 1px;
         }
 
         .section-header-sub {
-            color: var(--primary-blue);
-            font-size: 20px;
+            color: var(--color-headers);
+            font-size: calc(var(--fz-headers) - 1px);
             font-weight: 800;
             text-align: center;
-            margin: 6px 0 2px 0;
+            margin: 4px 0 1px 0;
             font-family: 'Times New Roman', Times, serif;
             letter-spacing: 0.5px;
         }
 
         .legal-block-title {
-            color: var(--primary-blue);
-            font-size: 14px;
+            color: var(--color-subheaders);
+            font-size: var(--fz-subheaders);
             font-weight: bold;
             font-style: italic;
             font-family: 'Times New Roman', Times, serif;
@@ -535,85 +645,130 @@
 
         .legal-text {
             font-family: 'Times New Roman', Times, serif;
-            font-size: 12px;
-            line-height: 1.4;
-            color: #111;
+            font-size: var(--fz-body);
+            line-height: 1.35;
+            color: var(--color-body);
             text-align: justify;
         }
 
         .legal-text p {
-            margin-bottom: 4px;
+            margin-bottom: 2px;
         }
 
         .legal-text p:last-child {
             margin-bottom: 0;
         }
 
-        .company-footer {
-            border: 1.5px solid var(--border-blue);
-            border-radius: 6px;
-            padding: 8px 14px;
-            display: flex;
+        /* =========================================
+           3. ERROR & MISSING INFO MODAL
+           ========================================= */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.65);
+            display: none;
+            justify-content: center;
             align-items: center;
-            justify-content: space-between;
-            gap: 15px;
-            background: #fafafa;
+            z-index: 99999;
         }
 
-        .footer-logo-wrapper {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            flex-shrink: 0;
-        }
-
-        .footer-logo-img {
-            max-height: 48px;
-            max-width: 70px;
-            width: auto;
-            display: block;
-            object-fit: contain;
-        }
-
-        .footer-company-name {
-            font-size: 15px;
-            font-weight: bold;
-            color: var(--primary-blue);
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            font-family: 'Times New Roman', Times, serif;
-        }
-
-        .footer-info {
+        .validation-modal-box {
+            background: #ffffff;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 440px;
+            padding: 22px;
+            box-shadow: 0 10px 35px rgba(0,0,0,0.5);
             display: flex;
             flex-direction: column;
-            gap: 2px;
-            text-align: right;
-            font-size: 11px;
-            color: #333;
-            font-family: 'Times New Roman', Times, serif;
+            gap: 14px;
+            animation: modalPop 0.2s ease-out;
         }
 
-        .footer-info a {
-            color: var(--primary-blue);
-            text-decoration: none;
+        @keyframes modalPop {
+            from { transform: scale(0.95); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        .modal-title-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-bottom: 2px solid #e03131;
+            padding-bottom: 8px;
+        }
+
+        .modal-title-row h3 {
+            color: #c92a2a;
+            font-size: 16.5px;
+            font-weight: bold;
+            margin: 0;
+        }
+
+        .missing-items-list {
+            background: #fff5f5;
+            border: 1px solid #ffc9c9;
+            border-radius: 6px;
+            padding: 10px 14px 10px 28px;
+            max-height: 200px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .missing-items-list li {
+            font-size: 12px;
+            color: #495057;
             font-weight: bold;
         }
 
-        .footer-info a:hover {
-            text-decoration: underline;
+        .modal-btn-row {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 4px;
         }
 
-        .guest-input-row .g-name {
-            text-transform: uppercase;
+        .btn-modal-fix {
+            background: #e9ecef;
+            border: 1px solid #ced4da;
+            color: #495057;
+            font-weight: bold;
+            font-size: 12px;
+            padding: 8px 14px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .btn-modal-fix:hover {
+            background: #dee2e6;
+        }
+
+        .btn-modal-skip {
+            background: #0056b3;
+            border: none;
+            color: #ffffff;
+            font-weight: bold;
+            font-size: 12px;
+            padding: 8px 16px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .btn-modal-skip:hover {
+            background: #004085;
         }
 
         /* =========================================
-           3. A4 VECTOR PRINT STYLES
+           4. A4 PRINT STYLES
            ========================================= */
         @page {
             size: A4 portrait;
-            margin: 6mm;
+            margin: 0;
         }
 
         @media print {
@@ -640,29 +795,30 @@
             }
 
             #voucher-document {
-                width: 100% !important;
-                max-width: 100% !important;
+                width: 210mm !important;
+                height: 297mm !important;
+                max-height: 297mm !important;
                 box-shadow: none !important;
-                padding: 4mm 4mm !important;
+                padding: 6mm 12mm !important;
                 margin: 0 auto !important;
                 page-break-inside: avoid;
+                page-break-after: avoid;
                 gap: 8px !important;
             }
 
-            .doc-section-card {
-                border: 2px solid var(--border-blue) !important;
-                border-radius: 6px !important;
-                page-break-inside: avoid;
+            .watermark-overlay {
+                display: block !important;
+                opacity: var(--watermark-opacity) !important;
             }
 
-            .company-footer {
-                border: 1.5px solid var(--border-blue) !important;
-                background: #fff !important;
+            .doc-section-card {
+                border: 2.5px solid var(--color-border-card) !important;
+                border-radius: 4px !important;
                 page-break-inside: avoid;
             }
         }
 
-        @media (max-width: 1100px) {
+        @media (max-width: 1300px) {
             .main-wrapper {
                 flex-direction: column;
                 align-items: center;
@@ -671,186 +827,288 @@
                 position: static;
                 max-height: none;
                 width: 100%;
-                max-width: 760px;
+                max-width: 210mm;
             }
         }
     </style>
 </head>
 <body>
 
-    <datalist id="roomTypeSuggestions">
-        <option value="PREMIUM"></option>
-        <option value="Executive Double Suite"></option>
-        <option value="STANDARD"></option>
-        <option value="DELUXE"></option>
-        <option value="EXECUTIVE SUITE"></option>
-        <option value="SUPERIOR ROOM"></option>
-        <option value="KING ROOM"></option>
-        <option value="TWIN ROOM"></option>
-    </datalist>
+    <datalist id="roomTypeSuggestions"></datalist>
+    <datalist id="mealTypeSuggestions"></datalist>
 
     <div class="main-wrapper">
         <aside class="editor-container">
-            <div class="sidebar-top">
-                <h2>Voucher Editor</h2>
-                <button type="button" class="btn-settings" onclick="openSettingsModal()">⚙️ Settings</button>
+            <div class="sidebar-tabs">
+                <button type="button" class="tab-btn active" onclick="switchSidebarTab('tabData', this)">📝 Booking Data</button>
+                <button type="button" class="tab-btn" onclick="switchSidebarTab('tabStyles', this)">🎨 Styles & Logo</button>
             </div>
 
-            <form id="voucherForm" onsubmit="event.preventDefault();">
+            <!-- Tab 1: Booking Data Form -->
+            <div id="tabData" class="tab-content active">
+                <form id="voucherForm" onsubmit="event.preventDefault();">
+                    <div class="form-grid">
+                        <div class="section-title">General Booking</div>
+                        <div class="form-group">
+                            <label for="inputBookingDate">Booking Date</label>
+                            <input type="date" id="inputBookingDate">
+                        </div>
+                        <div class="form-group">
+                            <label for="inputBookingRef">Booking Ref.</label>
+                            <input type="text" id="inputBookingRef" placeholder="e.g. 330-272558">
+                        </div>
+
+                        <div class="section-title">Hotel Info</div>
+                        <div class="form-group full-width">
+                            <label for="inputHotelName">Hotel Name</label>
+                            <input type="text" id="inputHotelName" placeholder="e.g. The Ritz Carlton">
+                        </div>
+                        <div class="form-group full-width">
+                            <label for="inputAddress">Address / Location</label>
+                            <input type="text" id="inputAddress" placeholder="e.g. Moscow, Russia">
+                        </div>
+
+                        <div class="section-title">Stay Dates & Units</div>
+                        <div class="form-group">
+                            <label for="inputCheckIn">Check-in Date</label>
+                            <input type="date" id="inputCheckIn">
+                        </div>
+                        <div class="form-group">
+                            <label for="inputCheckOut">Check-out Date</label>
+                            <input type="date" id="inputCheckOut">
+                        </div>
+                        <div class="form-group">
+                            <label for="inputNights">No. of Nights</label>
+                            <input type="number" id="inputNights" min="0" placeholder="0">
+                        </div>
+                        <div class="form-group">
+                            <label for="inputRooms">No. of Rooms</label>
+                            <input type="number" id="inputRooms" min="0" placeholder="0">
+                        </div>
+
+                        <!-- Meal Included Checkbox & Quick Default Selector -->
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="chkMealIncluded" onchange="toggleMealInclusion(this.checked)">
+                            <label for="chkMealIncluded">Meal Included (Adds Meal column to Guest Table)</label>
+                        </div>
+
+                        <div class="form-group full-width" id="mealTypeInputWrapper" style="display: none;">
+                            <label for="inputMealType">Default Meal Plan</label>
+                            <input type="text" id="inputMealType" list="mealTypeSuggestions" placeholder="e.g. Bed & Breakfast (BB)" oninput="applyDefaultMealToAll(this.value)" onchange="registerNewMealType(this.value)">
+                        </div>
+
+                        <div class="section-title">Guests</div>
+                        <div class="guest-inputs-wrapper" id="guestInputsContainer"></div>
+                        
+                        <button type="button" class="btn-add-guest" onclick="addGuestRow()">+ Add Guest Row</button>
+
+                        <div class="section-title">Special Remarks</div>
+                        <div class="form-group full-width">
+                            <label for="inputSpecialRemarks">Custom Remarks (Select + Ctrl/Cmd+B)</label>
+                            <textarea id="inputSpecialRemarks" placeholder="Enter special remarks or notes here...">All extras to be paid direct to **Hotel/The Service Provider.**</textarea>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Tab 2: Live Styles & Logo -->
+            <div id="tabStyles" class="tab-content">
                 <div class="form-grid">
-                    <div class="section-title">General Booking</div>
-                    <div class="form-group">
-                        <label for="inputBookingDate">Booking Date</label>
-                        <input type="date" id="inputBookingDate">
-                    </div>
-                    <div class="form-group">
-                        <label for="inputBookingRef">Booking Ref.</label>
-                        <input type="text" id="inputBookingRef" value="330272558">
-                    </div>
-
-                    <div class="section-title">Hotel Info</div>
+                    <div class="section-title">Upload Logo</div>
                     <div class="form-group full-width">
-                        <label for="inputHotelName">Hotel Name</label>
-                        <input type="text" id="inputHotelName" value="The Ritz Carlton">
+                        <input type="file" id="inputHeaderLogo" accept="image/*" onchange="handleHeaderLogoUpload(event)">
                     </div>
+
+                    <div class="section-title">Watermark Settings</div>
                     <div class="form-group full-width">
-                        <label for="inputAddress">Address / Location</label>
-                        <input type="text" id="inputAddress" value="Moscow, Russia">
+                        <label for="inputWatermarkText">Watermark Text</label>
+                        <input type="text" id="inputWatermarkText" value="SIMBA VOYAGES" oninput="updateWatermarkText(this.value)">
                     </div>
 
-                    <div class="section-title">Stay Dates & Units</div>
-                    <div class="form-group">
-                        <label for="inputCheckIn">Check-in Date</label>
-                        <input type="date" id="inputCheckIn">
-                    </div>
-                    <div class="form-group">
-                        <label for="inputCheckOut">Check-out Date</label>
-                        <input type="date" id="inputCheckOut">
-                    </div>
-                    <div class="form-group">
-                        <label for="inputNights">No. of Nights</label>
-                        <input type="number" id="inputNights" min="1" value="3">
-                    </div>
-                    <div class="form-group">
-                        <label for="inputRooms">No. of Rooms</label>
-                        <input type="number" id="inputRooms" min="1" value="1">
+                    <div class="section-title">Live Typography & Colors</div>
+                </div>
+
+                <div id="stylingControlsWrapper" style="display: flex; flex-direction: column; gap: 6px; margin-top: 6px;">
+                    <!-- Watermark Opacity -->
+                    <div class="style-control-row watermark-row">
+                        <label>Watermark Opacity</label>
+                        <input type="range" id="style_watermark_opacity" min="0.01" max="0.25" step="0.005" value="0.065" oninput="updateStyleWithBadge('--watermark-opacity', this.value, 'val_watermark_opacity')">
+                        <span class="val-badge" id="val_watermark_opacity">0.065</span>
                     </div>
 
-                    <div class="section-title">Guests</div>
-                    <div class="guest-inputs-wrapper" id="guestInputsContainer"></div>
-                    
-                    <button type="button" class="btn-add-guest" onclick="addGuestRow()">+ Add Guest Row</button>
+                    <!-- Main Title -->
+                    <div class="style-control-row">
+                        <label>Main Title</label>
+                        <input type="range" id="style_fz_title" min="14" max="28" step="0.5" value="22.5" oninput="updateStyleWithBadge('--fz-title', this.value + 'px', 'val_fz_title')">
+                        <span class="val-badge" id="val_fz_title">22.5px</span>
+                        <input type="color" id="style_color_title" value="#0056b3" oninput="updateStyleWithBadge('--color-title', this.value, 'val_color_title')">
+                        <span class="val-badge" id="val_color_title">#0056B3</span>
+                    </div>
 
-                    <div class="section-title">Special Remarks</div>
-                    <div class="form-group full-width">
-                        <label for="inputSpecialRemarks">Custom Service Remarks</label>
-                        <textarea id="inputSpecialRemarks">All extras to be paid direct to **Hotel/the Service Provider.**</textarea>
+                    <!-- Section Headers -->
+                    <div class="style-control-row">
+                        <label>Section Headers</label>
+                        <input type="range" id="style_fz_headers" min="14" max="28" step="0.5" value="22" oninput="updateStyleWithBadge('--fz-headers', this.value + 'px', 'val_fz_headers')">
+                        <span class="val-badge" id="val_fz_headers">22px</span>
+                        <input type="color" id="style_color_headers" value="#0056b3" oninput="updateStyleWithBadge('--color-headers', this.value, 'val_color_headers')">
+                        <span class="val-badge" id="val_color_headers">#0056B3</span>
+                    </div>
+
+                    <!-- Subtitles -->
+                    <div class="style-control-row">
+                        <label>Subtitles</label>
+                        <input type="range" id="style_fz_subheaders" min="11" max="22" step="0.5" value="17" oninput="updateStyleWithBadge('--fz-subheaders', this.value + 'px', 'val_fz_subheaders')">
+                        <span class="val-badge" id="val_fz_subheaders">17px</span>
+                        <input type="color" id="style_color_subheaders" value="#0056b3" oninput="updateStyleWithBadge('--color-subheaders', this.value, 'val_color_subheaders')">
+                        <span class="val-badge" id="val_color_subheaders">#0056B3</span>
+                    </div>
+
+                    <!-- Body Text -->
+                    <div class="style-control-row">
+                        <label>Body Text</label>
+                        <input type="range" id="style_fz_body" min="9" max="20" step="0.5" value="15" oninput="updateStyleWithBadge('--fz-body', this.value + 'px', 'val_fz_body')">
+                        <span class="val-badge" id="val_fz_body">15px</span>
+                        <input type="color" id="style_color_body" value="#111111" oninput="updateStyleWithBadge('--color-body', this.value, 'val_color_body')">
+                        <span class="val-badge" id="val_color_body">#111111</span>
+                    </div>
+
+                    <!-- Table & Badges -->
+                    <div class="style-control-row">
+                        <label>Table & Badges</label>
+                        <input type="range" id="style_fz_table" min="9" max="16" step="0.5" value="12" oninput="updateStyleWithBadge('--fz-table', this.value + 'px', 'val_fz_table')">
+                        <span class="val-badge" id="val_fz_table">12px</span>
+                        <input type="color" id="style_color_table" value="#000000" oninput="updateStyleWithBadge('--color-table', this.value, 'val_color_table')">
+                        <span class="val-badge" id="val_color_table">#000000</span>
+                    </div>
+
+                    <div class="section-title" style="margin-top: 8px;">Border Colors</div>
+
+                    <!-- Outer Card Border -->
+                    <div class="style-control-row border-only">
+                        <label>Outer Card Border</label>
+                        <div></div>
+                        <input type="color" id="style_color_border_card" value="#0056b3" oninput="updateStyleWithBadge('--color-border-card', this.value, 'val_color_border_card')">
+                        <span class="val-badge" id="val_color_border_card">#0056B3</span>
+                    </div>
+
+                    <!-- Inner Table / Pills Border -->
+                    <div class="style-control-row border-only">
+                        <label>Inner Table / Pills</label>
+                        <div></div>
+                        <input type="color" id="style_color_border_inner" value="#0056b3" oninput="updateStyleWithBadge('--color-border-inner', this.value, 'val_color_border_inner')">
+                        <span class="val-badge" id="val_color_border_inner">#0056B3</span>
                     </div>
                 </div>
 
-                <div class="btn-actions">
-                    <button type="button" class="btn-print" onclick="triggerCustomPrint()">
-                        <span>🖨️ Save as PDF / Print</span>
-                    </button>
+                <div class="styles-action-row">
+                    <button type="button" class="btn-reset-styles" onclick="resetStylesToDefault()">Reset Default Styles</button>
                 </div>
-            </form>
+            </div>
+
+            <div class="btn-actions">
+                <button type="button" class="btn-print" onclick="validateAndPrint()">
+                    <span>🖨️ Save as PDF / Print</span>
+                </button>
+            </div>
         </aside>
 
-        <!-- Company Settings Modal -->
-        <div class="modal-overlay" id="settingsModal" onclick="closeModalOnOverlay(event)">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h3>Company Profile Settings</h3>
-                    <button type="button" class="btn-close-modal" onclick="closeSettingsModal()">×</button>
+        <!-- Missing Information Validation Modal -->
+        <div class="modal-overlay" id="validationModal">
+            <div class="validation-modal-box">
+                <div class="modal-title-row">
+                    <span style="font-size:20px;">⚠️</span>
+                    <h3>Incomplete Voucher Details</h3>
                 </div>
-                
-                <div class="form-grid">
-                    <div class="form-group full-width">
-                        <label for="inputCompanyLogo">Company Logo</label>
-                        <input type="file" id="inputCompanyLogo" accept="image/*" onchange="handleLogoUpload(event)">
-                    </div>
-                    <div class="form-group full-width">
-                        <label for="inputCompanyName">Company Name</label>
-                        <input type="text" id="inputCompanyName" value="Simba Voyages Ltd">
-                    </div>
-                    <div class="form-group full-width">
-                        <label for="inputCompanyAddress">Address</label>
-                        <input type="text" id="inputCompanyAddress" value="Kigali, Rwanda">
-                    </div>
-                    <div class="form-group">
-                        <label for="inputCompanyPhone">Phone</label>
-                        <input type="text" id="inputCompanyPhone" value="+250 788 000 000">
-                    </div>
-                    <div class="form-group">
-                        <label for="inputCompanyWebsite">Website</label>
-                        <input type="text" id="inputCompanyWebsite" value="www.simbavoyages.com">
-                    </div>
-                </div>
-
-                <div class="modal-footer">
-                    <button type="button" class="btn-save-modal" onclick="saveSettings()">Save Changes</button>
+                <p style="font-size:12.5px; color:#333; line-height:1.4;">
+                    The following recommended fields are currently blank on the voucher:
+                </p>
+                <ul class="missing-items-list" id="missingItemsList"></ul>
+                <div class="modal-btn-row">
+                    <button type="button" class="btn-modal-fix" onclick="closeValidationModal()">Fix Details</button>
+                    <button type="button" class="btn-modal-skip" onclick="proceedToPrintWithoutValidation()">Skip &amp; Print Anyway</button>
                 </div>
             </div>
         </div>
 
+        <!-- 1:1 Live A4 Preview Sheet Matching Reference Design -->
         <div class="preview-wrapper">
             <main id="voucher-document">
+                <!-- Diagonal Authentic Watermark Overlay -->
+                <div class="watermark-overlay" id="dispWatermark">SIMBA VOYAGES</div>
+
                 <section class="doc-section-card">
                     <div class="header">
-                        <img id="headerLogo" src="simba_voyages.jpg" alt="Company Logo" onerror="this.src='simba_voyages.jpg'">
+                        <img id="headerLogo" src="simba_voyages.jpg" alt="Header Logo" onerror="this.src='simba_voyages.jpg'">
                         <h1 class="title">ACCOMMODATION DETAILS</h1>
                     </div>
 
-                    <div class="booking-info-row">
-                        <div class="pill-badge">
-                            <span>Booking Date: <span id="dispBookingDate">10 August 2026</span></span>
+                    <!-- Row 1: Booking Date & Booking Ref enclosed in Solid Blue Bar -->
+                    <div class="solid-blue-pill-bar space-between">
+                        <div class="white-inset-badge">
+                            <strong>Booking Date:</strong> <span id="dispBookingDate">&nbsp;</span>
                         </div>
-                        <div class="pill-badge">
-                            <span>Booking Ref.: <span id="dispBookingRef">330272558</span></span>
-                        </div>
-                    </div>
-
-                    <div class="blue-bar">
-                        <div class="white-pill-tag">HOTEL INFORMATION</div>
-                    </div>
-
-                    <div class="hotel-box">
-                        <div class="accent-pill"></div>
-                        <div class="hotel-text">
-                            <div class="hotel-name" id="dispHotelName">The Ritz Carlton</div>
-                            <div class="hotel-address" id="dispAddress">Moscow, Russia</div>
+                        <div class="white-inset-badge">
+                            <strong>Booking Ref.:</strong> <span id="dispBookingRef">&nbsp;</span>
                         </div>
                     </div>
 
-                    <div class="stats-grid">
-                        <div class="stat-item">Check-in: <span id="dispCheckIn">11/08/2026</span></div>
-                        <div class="stat-item">Check-out: <span id="dispCheckOut">14/08/2026</span></div>
-                        <div class="stat-item">No. of Nights: <span id="dispNights">03</span></div>
-                        <div class="stat-item">No. of Rooms: <span id="dispRooms">01</span></div>
+                    <!-- Row 2: HOTEL INFORMATION enclosed in Solid Blue Bar -->
+                    <div class="solid-blue-pill-bar">
+                        <div class="white-inset-badge">
+                            <strong>HOTEL INFORMATION</strong>
+                        </div>
                     </div>
 
-                    <div class="blue-bar">
-                        <div class="white-pill-tag">GUEST DETAILS</div>
-                        <div class="white-pill-tag mixed-case">No. of Guests: <span id="dispGuests" style="margin-left:4px;">01</span></div>
+                    <!-- Row 3: Hotel Box with Vertical Accent Pill on Left -->
+                    <div class="hotel-row-wrapper">
+                        <div class="vertical-accent-pill"></div>
+                        <div class="hotel-bordered-box">
+                            <div class="hotel-name" id="dispHotelName">&nbsp;</div>
+                            <div class="hotel-address" id="dispAddress">&nbsp;</div>
+                        </div>
                     </div>
 
+                    <!-- Row 4: Stay Dates & Units enclosed in Solid Blue Bar -->
+                    <div class="solid-blue-pill-bar space-between">
+                        <div class="white-inset-badge">
+                            <strong>Check in Date:</strong> <span id="dispCheckIn">&nbsp;</span>
+                        </div>
+                        <div class="white-inset-badge">
+                            <strong>Check out Date:</strong> <span id="dispCheckOut">&nbsp;</span>
+                        </div>
+                        <div class="white-inset-badge">
+                            <strong>No of Nights:</strong> <span id="dispNights">00</span>
+                        </div>
+                        <div class="white-inset-badge">
+                            <strong>No of Rooms:</strong> <span id="dispRooms">00</span>
+                        </div>
+                    </div>
+
+                    <!-- Row 5: GUEST DETAILS enclosed in Solid Blue Bar -->
+                    <div class="solid-blue-pill-bar space-between">
+                        <div class="white-inset-badge">
+                            <strong>GUEST DETAILS</strong>
+                        </div>
+                        <div class="white-inset-badge">
+                            <strong>Number of guests:</strong> <span id="dispGuests">00</span>
+                        </div>
+                    </div>
+
+                    <!-- Guest Details Section: Capsules for Column Headings ONLY -->
                     <div class="guest-row-container">
-                        <div class="guest-table-header">
-                            <div class="guest-header-cell">
-                                <div class="mini-pill"></div>
-                                <span>Room</span>
-                            </div>
-                            <div class="guest-header-cell">
-                                <div class="mini-pill"></div>
-                                <span>Guest Name</span>
-                            </div>
-                            <div class="guest-header-cell">
-                                <div class="mini-pill"></div>
-                                <span>Room Type</span>
-                            </div>
+                        <div class="guest-table-header" id="guestTableHeader">
+                            <div class="mini-vertical-pill"></div>
+                            <div class="guest-header-capsule">ROOM</div>
+                            <div class="mini-vertical-pill"></div>
+                            <div class="guest-header-capsule">GUEST NAME</div>
+                            <div class="mini-vertical-pill"></div>
+                            <div class="guest-header-capsule">ROOM CATEGORY</div>
+                            <div class="mini-vertical-pill meal-col-el" style="display: none;"></div>
+                            <div class="guest-header-capsule meal-col-el" style="display: none;">MEAL PLAN</div>
                         </div>
 
-                        <div id="guestDisplayContainer" style="display: flex; flex-direction: column; gap: 3px;"></div>
+                        <!-- Data Rows: Continuous Rectangular Card without Capsules -->
+                        <div id="guestDisplayContainer" style="display: flex; flex-direction: column; gap: 5px;"></div>
                     </div>
                 </section>
 
@@ -860,7 +1118,7 @@
                         <p><strong><em>IMPORTANT NOTE:</em></strong> Please be informed that in some countries, there is a local tax known as "visitor's tax", "city tax", "tourist tax" (or similar name), which is not included in the booking price and is directly payable by the guest at the corresponding hotel and/or at the airport.</p>
                         <p>Extra bed for extra person / extra child is not guaranteed, and it will be subject to hotel's policy and additional costs may apply.</p>
                         <p><strong><em>Special Service Requests/Remarks:</em></strong><br>
-                        <span id="dispSpecialRemarks">All extras to be paid direct to <strong>Hotel/the Service Provider.</strong></span></p>
+                        <span id="dispSpecialRemarks">All extras to be paid direct to <strong>Hotel Service Provider.</strong></span></p>
                     </div>
 
                     <h3 class="section-header-sub">Terms &amp; Conditions</h3>
@@ -883,25 +1141,20 @@
                         <p>It is understood that we act as agent only for all services covered hereby. Further we shall not be responsible for any loss, injury or damage resulting from acts of God, dangers, fire, breakdown of machinery, damage resulting from acts of God, equipment or vehicles, acts of government authority, wars, civil disturbances, riots, thefts, pilferage, epidemics, quarantines or any delays or changes including any extra expenses which the passenger may incur as a result of any of the foregoing causes.</p>
                     </div>
                 </section>
-
-                <footer class="company-footer">
-                    <div class="footer-logo-wrapper">
-                        <img id="footerLogo" src="simba voyages.jpg" alt="Company Logo" class="footer-logo-img" onerror="this.src='image_9aa022.png'">
-                        <div class="footer-company-name" id="dispCompanyName">Simba Voyages Ltd</div>
-                    </div>
-                    <div class="footer-info">
-                        <div id="dispCompanyAddress">Kigali, Rwanda</div>
-                        <div>Tel: <span id="dispCompanyPhone">+250 788 000 000</span></div>
-                        <div>Web: <a href="https://www.simbavoyages.com" target="_blank" id="dispCompanyWebsite">www.simbavoyages.com</a></div>
-                    </div>
-                </footer>
             </main>
         </div>
     </div>
 
     <script>
+        function switchSidebarTab(tabId, btn) {
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            btn.classList.add('active');
+            document.getElementById(tabId).classList.add('active');
+        }
+
         function formatLongDate(dateStr) {
-            if (!dateStr) return '';
+            if (!dateStr) return '&nbsp;';
             const [y, m, d] = dateStr.split('-');
             const date = new Date(y, m - 1, d);
             const day = date.getDate();
@@ -911,13 +1164,14 @@
         }
 
         function formatSlashDate(dateStr) {
-            if (!dateStr) return '';
+            if (!dateStr) return '&nbsp;';
             const [y, m, d] = dateStr.split('-');
             return `${d.padStart(2, '0')}/${m.padStart(2, '0')}/${y}`;
         }
 
         function padTwo(num) {
-            return String(num).padStart(2, '0');
+            const n = parseInt(num, 10);
+            return isNaN(n) ? '00' : String(n).padStart(2, '0');
         }
 
         function calculateNights() {
@@ -931,51 +1185,123 @@
                 const nights = diffDays > 0 ? diffDays : 0;
                 document.getElementById('inputNights').value = nights;
                 document.getElementById('dispNights').textContent = padTwo(nights);
+            } else if (!document.getElementById('inputNights').value) {
+                document.getElementById('dispNights').textContent = '00';
             }
         }
 
         function updateRoomAndGuestCounts() {
-            const guestCount = guests.length;
+            const filledGuests = guests.filter(g => g.name.trim() !== '');
+            const guestCount = filledGuests.length;
             document.getElementById('dispGuests').textContent = padTwo(guestCount);
 
             const uniqueRooms = new Set(guests.map(g => g.room.trim()).filter(r => r !== ''));
-            const roomCount = uniqueRooms.size || (guestCount > 0 ? 1 : 0);
-            document.getElementById('inputRooms').value = roomCount;
+            const roomCount = uniqueRooms.size;
             document.getElementById('dispRooms').textContent = padTwo(roomCount);
+            document.getElementById('inputRooms').value = roomCount || '';
         }
-
-        // Initialize Defaults
-        document.getElementById('inputBookingDate').value = '2026-08-10';
-        document.getElementById('inputCheckIn').value = '2026-08-11';
-        document.getElementById('inputCheckOut').value = '2026-08-14';
 
         const singleBindings = [
             { input: 'inputBookingDate', display: 'dispBookingDate', formatter: formatLongDate },
-            { input: 'inputBookingRef', display: 'dispBookingRef' },
-            { input: 'inputHotelName', display: 'dispHotelName', action: (val) => localStorage.setItem('saved_hotel_name', val) },
-            { input: 'inputAddress', display: 'dispAddress', action: (val) => localStorage.setItem('saved_hotel_address', val) },
+            { input: 'inputBookingRef', display: 'dispBookingRef', fallback: '&nbsp;' },
+            { input: 'inputHotelName', display: 'dispHotelName', fallback: '&nbsp;', action: (val) => localStorage.setItem('saved_hotel_name', val) },
+            { input: 'inputAddress', display: 'dispAddress', fallback: '&nbsp;', action: (val) => localStorage.setItem('saved_hotel_address', val) },
             { input: 'inputCheckIn', display: 'dispCheckIn', formatter: formatSlashDate, action: calculateNights },
             { input: 'inputCheckOut', display: 'dispCheckOut', formatter: formatSlashDate, action: calculateNights },
             { input: 'inputNights', display: 'dispNights', formatter: padTwo },
             { input: 'inputRooms', display: 'dispRooms', formatter: padTwo }
         ];
 
-        singleBindings.forEach(({ input, display, formatter, action }) => {
+        singleBindings.forEach(({ input, display, formatter, fallback, action }) => {
             const inputEl = document.getElementById(input);
             const dispEl = document.getElementById(display);
             if (inputEl && dispEl) {
                 inputEl.addEventListener('input', (e) => {
-                    dispEl.textContent = formatter ? formatter(e.target.value) : e.target.value;
-                    if (action) action(e.target.value);
+                    const val = e.target.value;
+                    dispEl.innerHTML = formatter ? formatter(val) : (val.trim() || fallback || '&nbsp;');
+                    if (action) action(val);
                 });
             }
         });
 
-        // --- Custom Remarks: Bold Parser & Ctrl+B Shortcut ---
+        // =========================================
+        // WATERMARK LIVE UPDATES
+        // =========================================
+        function updateWatermarkText(val) {
+            const watermarkEl = document.getElementById('dispWatermark');
+            const trimmed = val.trim();
+            watermarkEl.textContent = trimmed ? trimmed.toUpperCase() : '';
+            localStorage.setItem('saved_voucher_watermark_text', val);
+        }
+
+        // =========================================
+        // MEAL INCLUSION & DATALIST PERSISTENCE
+        // =========================================
+        let isMealIncluded = false;
+        const defaultMealTypes = [
+            "Bed & Breakfast (BB)",
+            "Half Board (HB)",
+            "Full Board (FB)",
+            "All Inclusive (AI)",
+            "Room Only (RO)"
+        ];
+
+        let mealTypes = JSON.parse(localStorage.getItem('saved_voucher_meal_types') || 'null') || defaultMealTypes;
+
+        function renderMealTypeDatalist() {
+            const datalist = document.getElementById('mealTypeSuggestions');
+            datalist.innerHTML = '';
+            mealTypes.forEach(type => {
+                const opt = document.createElement('option');
+                opt.value = type;
+                datalist.appendChild(opt);
+            });
+        }
+
+        function registerNewMealType(newType) {
+            const trimmed = newType?.trim();
+            if (!trimmed) return;
+            const exists = mealTypes.some(t => t.toLowerCase() === trimmed.toLowerCase());
+            if (!exists) {
+                mealTypes.push(trimmed);
+                localStorage.setItem('saved_voucher_meal_types', JSON.stringify(mealTypes));
+                renderMealTypeDatalist();
+            }
+        }
+
+        function toggleMealInclusion(included) {
+            isMealIncluded = included;
+            document.getElementById('mealTypeInputWrapper').style.display = included ? 'flex' : 'none';
+            document.querySelectorAll('.meal-col-el').forEach(el => el.style.display = included ? 'flex' : 'none');
+
+            const header = document.getElementById('guestTableHeader');
+            if (included) {
+                header.classList.add('with-meal');
+                const defaultPlan = document.getElementById('inputMealType').value.trim();
+                guests.forEach(g => { if (!g.meal && defaultPlan) g.meal = defaultPlan; });
+            } else {
+                header.classList.remove('with-meal');
+            }
+
+            localStorage.setItem('saved_voucher_meal_included', included ? 'true' : 'false');
+            renderGuests();
+        }
+
+        function applyDefaultMealToAll(val) {
+            localStorage.setItem('saved_voucher_default_meal', val);
+            guests.forEach((g) => {
+                g.meal = val;
+            });
+            renderGuests();
+            saveGuests();
+        }
+
+        // Remarks Markdown Parser & Shortcut
         const remarksInput = document.getElementById('inputSpecialRemarks');
         const remarksDisp = document.getElementById('dispSpecialRemarks');
 
         function parseRemarksMarkdown(text) {
+            if (!text.trim()) return '&nbsp;';
             const escaped = text
                 .replace(/&/g, '&amp;')
                 .replace(/</g, '&lt;')
@@ -1014,9 +1340,45 @@
             }
         });
 
-        // --- Guests Management (Empty room type default & localStorage saved) ---
+        // =========================================
+        // ROOM TYPE DATALIST & GUEST PERSISTENCE
+        // =========================================
+        const defaultRoomTypes = [
+            "PREMIUM",
+            "Executive Double Suite",
+            "STANDARD",
+            "DELUXE",
+            "EXECUTIVE SUITE",
+            "SUPERIOR ROOM",
+            "KING ROOM",
+            "TWIN ROOM"
+        ];
+
+        let roomTypes = JSON.parse(localStorage.getItem('saved_voucher_room_types') || 'null') || defaultRoomTypes;
+
+        function renderRoomTypeDatalist() {
+            const datalist = document.getElementById('roomTypeSuggestions');
+            datalist.innerHTML = '';
+            roomTypes.forEach(type => {
+                const opt = document.createElement('option');
+                opt.value = type;
+                datalist.appendChild(opt);
+            });
+        }
+
+        function registerNewRoomType(newType) {
+            const trimmed = newType?.trim();
+            if (!trimmed) return;
+            const exists = roomTypes.some(t => t.toLowerCase() === trimmed.toLowerCase());
+            if (!exists) {
+                roomTypes.push(trimmed);
+                localStorage.setItem('saved_voucher_room_types', JSON.stringify(roomTypes));
+                renderRoomTypeDatalist();
+            }
+        }
+
         let guests = [
-            { room: "1.", name: "Mr. FAIZAAN BHATI", type: "" }
+            { room: "1.", name: "", type: "", meal: "" }
         ];
 
         function saveGuests() {
@@ -1031,35 +1393,39 @@
             displayContainer.innerHTML = '';
 
             guests.forEach((g, index) => {
+                // Sidebar Input Row
                 const row = document.createElement('div');
-                row.className = 'guest-input-row';
+                row.className = `guest-input-row ${isMealIncluded ? 'with-meal' : ''}`;
                 row.innerHTML = `
                     <input type="text" class="g-num" value="${g.room}" placeholder="#" oninput="updateGuest(${index}, 'room', this.value)">
                     <input type="text" class="g-name" value="${g.name}" placeholder="Guest Name" oninput="updateGuest(${index}, 'name', this.value)">
-                    <input type="text" class="g-type" list="roomTypeSuggestions" value="${g.type}" placeholder="Select room type..." oninput="updateGuest(${index}, 'type', this.value)">
+                    <input type="text" class="g-type" list="roomTypeSuggestions" value="${g.type || ''}" placeholder="Room Type..." oninput="updateGuest(${index}, 'type', this.value)" onchange="registerNewRoomType(this.value)">
+                    ${isMealIncluded ? `<input type="text" class="g-meal" list="mealTypeSuggestions" value="${g.meal || ''}" placeholder="Meal..." oninput="updateGuest(${index}, 'meal', this.value)" onchange="registerNewMealType(this.value)">` : ''}
                     ${guests.length > 1 ? `<button type="button" class="btn-remove" onclick="removeGuestRow(${index})">×</button>` : '<div></div>'}
                 `;
                 inputContainer.appendChild(row);
 
-                const dispRow = document.createElement('div');
-                dispRow.className = 'guest-table-row';
-                dispRow.innerHTML = `
-                    <div class="guest-data-cell center">${g.room || '&nbsp;'}</div>
-                    <div class="guest-data-cell">${g.name || '&nbsp;'}</div>
-                    <div class="guest-data-cell">${g.type || '&nbsp;'}</div>
+                // Voucher Data Row - Continuous Rounded Card (No Capsules on Data)
+                const rowWrapper = document.createElement('div');
+                rowWrapper.className = 'guest-data-row-wrapper';
+                rowWrapper.innerHTML = `
+                    <div class="vertical-accent-pill"></div>
+                    <div class="guest-data-card ${isMealIncluded ? 'with-meal' : ''}">
+                        <div class="guest-cell center">${g.room || '&nbsp;'}</div>
+                        <div class="guest-cell guest-name-cell">${g.name || '&nbsp;'}</div>
+                        <div class="guest-cell category-cell">${g.type || '&nbsp;'}</div>
+                        ${isMealIncluded ? `<div class="guest-cell category-cell">${g.meal || '&nbsp;'}</div>` : ''}
+                    </div>
                 `;
-                displayContainer.appendChild(dispRow);
+                displayContainer.appendChild(rowWrapper);
             });
 
             updateRoomAndGuestCounts();
         }
 
         function updateGuest(index, key, val) {
-            // Automatically force uppercase if editing guest name
             if (key === 'name') {
                 val = val.toUpperCase();
-                
-                // Keep the input field itself synced in uppercase
                 const inputContainer = document.getElementById('guestInputsContainer');
                 const activeInput = inputContainer.children[index]?.querySelector('.g-name');
                 if (activeInput && activeInput.value !== val) {
@@ -1070,22 +1436,32 @@
                 }
             }
 
+            if (key === 'type' && val.trim() !== '') registerNewRoomType(val);
+            if (key === 'meal' && val.trim() !== '') registerNewMealType(val);
+
             guests[index][key] = val;
             const displayContainer = document.getElementById('guestDisplayContainer');
             const targetRow = displayContainer.children[index];
             if (targetRow) {
-                if (key === 'room') {
-                    targetRow.children[0].innerHTML = val || '&nbsp;';
-                    updateRoomAndGuestCounts();
+                const card = targetRow.querySelector('.guest-data-card');
+                if (card) {
+                    if (key === 'room') {
+                        card.children[0].innerHTML = val || '&nbsp;';
+                        updateRoomAndGuestCounts();
+                    }
+                    if (key === 'name') card.children[1].innerHTML = val || '&nbsp;';
+                    if (key === 'type') card.children[2].innerHTML = val || '&nbsp;';
+                    if (key === 'meal' && isMealIncluded && card.children[3]) {
+                        card.children[3].innerHTML = val || '&nbsp;';
+                    }
                 }
-                if (key === 'name') targetRow.children[1].innerHTML = val || '&nbsp;';
-                if (key === 'type') targetRow.children[2].innerHTML = val || '&nbsp;';
             }
             saveGuests();
         }
 
         function addGuestRow() {
-            guests.push({ room: `${guests.length + 1}.`, name: '', type: '' });
+            const defaultMeal = document.getElementById('inputMealType').value.trim();
+            guests.push({ room: `${guests.length + 1}.`, name: '', type: '', meal: defaultMeal });
             renderGuests();
             saveGuests();
         }
@@ -1096,11 +1472,57 @@
             saveGuests();
         }
 
-        /* Dynamic PDF Filename Printing */
-        function triggerCustomPrint() {
+        // =========================================
+        // VALIDATION & PRINT HANDLING
+        // =========================================
+        function validateAndPrint() {
+            const missing = [];
+
+            if (!document.getElementById('inputBookingDate').value) missing.push("Booking Date");
+            if (!document.getElementById('inputBookingRef').value.trim()) missing.push("Booking Reference Number");
+            if (!document.getElementById('inputHotelName').value.trim()) missing.push("Hotel Name");
+            if (!document.getElementById('inputAddress').value.trim()) missing.push("Hotel Address / Location");
+            if (!document.getElementById('inputCheckIn').value) missing.push("Check-in Date");
+            if (!document.getElementById('inputCheckOut').value) missing.push("Check-out Date");
+
+            const hasAnyGuestName = guests.some(g => g.name.trim() !== '');
+            if (!hasAnyGuestName) missing.push("Guest Name(s)");
+
+            const hasAnyRoomType = guests.some(g => g.type.trim() !== '');
+            if (!hasAnyRoomType) missing.push("Room Category");
+
+            if (isMealIncluded) {
+                const hasAnyMeal = guests.some(g => (g.meal || '').trim() !== '');
+                if (!hasAnyMeal) missing.push("Meal Plan");
+            }
+
+            if (missing.length > 0) {
+                const listEl = document.getElementById('missingItemsList');
+                listEl.innerHTML = '';
+                missing.forEach(item => {
+                    const li = document.createElement('li');
+                    li.textContent = item;
+                    listEl.appendChild(li);
+                });
+                document.getElementById('validationModal').style.display = 'flex';
+            } else {
+                executePrint();
+            }
+        }
+
+        function closeValidationModal() {
+            document.getElementById('validationModal').style.display = 'none';
+        }
+
+        function proceedToPrintWithoutValidation() {
+            closeValidationModal();
+            executePrint();
+        }
+
+        function executePrint() {
             const originalTitle = document.title;
-            const firstGuest = guests[0]?.name?.trim();
-            const guestTitle = firstGuest ? firstGuest : "Guest";
+            const firstGuest = guests.find(g => g.name.trim() !== '')?.name?.trim();
+            const guestTitle = firstGuest ? firstGuest : "Hotel";
 
             document.title = `${guestTitle} Hotel Reservation`;
             window.print();
@@ -1108,103 +1530,126 @@
         }
 
         /* =========================================
-           SETTINGS & LOCALSTORAGE PERSISTENCE
+           CONFIGURED DEFAULT PALETTE & TYPOGRAPHY
            ========================================= */
-        function openSettingsModal() {
-            document.getElementById('settingsModal').style.display = 'flex';
+        const defaultStyles = {
+            '--fz-title': '22.5px',
+            '--color-title': '#0056b3',
+            '--fz-headers': '22px',
+            '--color-headers': '#0056b3',
+            '--fz-subheaders': '17px',
+            '--color-subheaders': '#0056b3',
+            '--fz-body': '15px',
+            '--color-body': '#111111',
+            '--fz-table': '12px',
+            '--color-table': '#000000',
+            '--color-border-card': '#0056b3',
+            '--color-border-inner': '#0056b3',
+            '--watermark-opacity': '0.065'
+        };
+
+        function updateStyleWithBadge(cssVar, val, badgeId) {
+            document.documentElement.style.setProperty(cssVar, val);
+            const badge = document.getElementById(badgeId);
+            if (badge) {
+                badge.textContent = val.startsWith('#') ? val.toUpperCase() : val;
+            }
+            const savedStyles = JSON.parse(localStorage.getItem('saved_voucher_styles') || '{}');
+            savedStyles[cssVar] = val;
+            localStorage.setItem('saved_voucher_styles', JSON.stringify(savedStyles));
         }
 
-        function closeSettingsModal() {
-            document.getElementById('settingsModal').style.display = 'none';
-        }
+        function syncControlInputs() {
+            const mapping = [
+                { id: 'style_fz_title', badgeId: 'val_fz_title', cssVar: '--fz-title', parse: (v) => parseFloat(v) },
+                { id: 'style_color_title', badgeId: 'val_color_title', cssVar: '--color-title' },
+                { id: 'style_fz_headers', badgeId: 'val_fz_headers', cssVar: '--fz-headers', parse: (v) => parseFloat(v) },
+                { id: 'style_color_headers', badgeId: 'val_color_headers', cssVar: '--color-headers' },
+                { id: 'style_fz_subheaders', badgeId: 'val_fz_subheaders', cssVar: '--fz-subheaders', parse: (v) => parseFloat(v) },
+                { id: 'style_color_subheaders', badgeId: 'val_color_subheaders', cssVar: '--color-subheaders' },
+                { id: 'style_fz_body', badgeId: 'val_fz_body', cssVar: '--fz-body', parse: (v) => parseFloat(v) },
+                { id: 'style_color_body', badgeId: 'val_color_body', cssVar: '--color-body' },
+                { id: 'style_fz_table', badgeId: 'val_fz_table', cssVar: '--fz-table', parse: (v) => parseFloat(v) },
+                { id: 'style_color_table', badgeId: 'val_color_table', cssVar: '--color-table' },
+                { id: 'style_color_border_card', badgeId: 'val_color_border_card', cssVar: '--color-border-card' },
+                { id: 'style_color_border_inner', badgeId: 'val_color_border_inner', cssVar: '--color-border-inner' },
+                { id: 'style_watermark_opacity', badgeId: 'val_watermark_opacity', cssVar: '--watermark-opacity', parse: (v) => parseFloat(v) }
+            ];
 
-        function closeModalOnOverlay(e) {
-            if (e.target.id === 'settingsModal') {
-                closeSettingsModal();
+            mapping.forEach(({ id, badgeId, cssVar, parse }) => {
+                const el = document.getElementById(id);
+                const badge = document.getElementById(badgeId);
+                const currentVal = getComputedStyle(document.documentElement).getPropertyValue(cssVar).trim();
+                if (el) el.value = parse ? parse(currentVal) : currentVal;
+                if (badge) badge.textContent = currentVal.startsWith('#') ? currentVal.toUpperCase() : currentVal;
+            });
+
+            const savedWatermark = localStorage.getItem('saved_voucher_watermark_text');
+            if (savedWatermark !== null) {
+                document.getElementById('inputWatermarkText').value = savedWatermark;
+                updateWatermarkText(savedWatermark);
             }
         }
 
-        function handleLogoUpload(event) {
+        function resetStylesToDefault() {
+            Object.entries(defaultStyles).forEach(([cssVar, value]) => {
+                document.documentElement.style.setProperty(cssVar, value);
+            });
+            localStorage.removeItem('saved_voucher_styles');
+            localStorage.removeItem('saved_voucher_watermark_text');
+            document.getElementById('inputWatermarkText').value = 'SIMBA VOYAGES';
+            updateWatermarkText('SIMBA VOYAGES');
+            syncControlInputs();
+        }
+
+        function handleHeaderLogoUpload(event) {
             const file = event.target.files[0];
             if (!file) return;
 
             const reader = new FileReader();
             reader.onload = function(e) {
-                const base64Logo = e.target.result;
-                document.getElementById('headerLogo').src = base64Logo;
-                document.getElementById('footerLogo').src = base64Logo;
-                localStorage.setItem('saved_voucher_logo', base64Logo);
+                const base64 = e.target.result;
+                document.getElementById('headerLogo').src = base64;
+                localStorage.setItem('saved_voucher_header_logo', base64);
             };
             reader.readAsDataURL(file);
         }
 
-        function saveSettings() {
-            const companyData = {
-                name: document.getElementById('inputCompanyName').value,
-                address: document.getElementById('inputCompanyAddress').value,
-                phone: document.getElementById('inputCompanyPhone').value,
-                website: document.getElementById('inputCompanyWebsite').value
-            };
-
-            localStorage.setItem('saved_voucher_company', JSON.stringify(companyData));
-            applyCompanyData(companyData);
-            closeSettingsModal();
-        }
-
-        function applyCompanyData(data) {
-            if (!data) return;
-            if (data.name) {
-                document.getElementById('inputCompanyName').value = data.name;
-                document.getElementById('dispCompanyName').textContent = data.name;
-            }
-            if (data.address) {
-                document.getElementById('inputCompanyAddress').value = data.address;
-                document.getElementById('dispCompanyAddress').textContent = data.address;
-            }
-            if (data.phone) {
-                document.getElementById('inputCompanyPhone').value = data.phone;
-                document.getElementById('dispCompanyPhone').textContent = data.phone;
-            }
-            if (data.website) {
-                document.getElementById('inputCompanyWebsite').value = data.website;
-                const link = document.getElementById('dispCompanyWebsite');
-                link.textContent = data.website;
-                link.href = data.website.startsWith('http') ? data.website : `https://${data.website}`;
-            }
-        }
-
         function loadSavedData() {
-            // Load saved company details
-            const savedCompany = localStorage.getItem('saved_voucher_company');
-            if (savedCompany) {
+            const savedStyles = localStorage.getItem('saved_voucher_styles');
+            if (savedStyles) {
                 try {
-                    applyCompanyData(JSON.parse(savedCompany));
-                } catch (err) {
-                    console.error("Failed to parse company settings:", err);
+                    const parsed = JSON.parse(savedStyles);
+                    Object.entries(parsed).forEach(([cssVar, val]) => {
+                        document.documentElement.style.setProperty(cssVar, val);
+                    });
+                } catch (e) {
+                    console.error("Could not parse saved styles", e);
                 }
+            } else {
+                Object.entries(defaultStyles).forEach(([cssVar, val]) => {
+                    document.documentElement.style.setProperty(cssVar, val);
+                });
+            }
+            syncControlInputs();
+
+            const savedHeaderLogo = localStorage.getItem('saved_voucher_header_logo');
+            if (savedHeaderLogo) {
+                document.getElementById('headerLogo').src = savedHeaderLogo;
             }
 
-            // Load saved company logo
-            const savedLogo = localStorage.getItem('saved_voucher_logo');
-            if (savedLogo) {
-                document.getElementById('headerLogo').src = savedLogo;
-                document.getElementById('footerLogo').src = savedLogo;
-            }
-
-            // Load saved Hotel Name & Address
             const savedHotel = localStorage.getItem('saved_hotel_name');
-            if (savedHotel !== null) {
+            if (savedHotel) {
                 document.getElementById('inputHotelName').value = savedHotel;
                 document.getElementById('dispHotelName').textContent = savedHotel;
             }
 
             const savedAddress = localStorage.getItem('saved_hotel_address');
-            if (savedAddress !== null) {
+            if (savedAddress) {
                 document.getElementById('inputAddress').value = savedAddress;
                 document.getElementById('dispAddress').textContent = savedAddress;
             }
 
-            // Load saved Guests
             const savedGuests = localStorage.getItem('saved_voucher_guests');
             if (savedGuests) {
                 try {
@@ -1216,9 +1661,21 @@
                     console.error("Failed to parse saved guests:", err);
                 }
             }
+
+            const savedMealIncluded = localStorage.getItem('saved_voucher_meal_included') === 'true';
+            const savedDefaultMeal = localStorage.getItem('saved_voucher_default_meal');
+            if (savedDefaultMeal) {
+                document.getElementById('inputMealType').value = savedDefaultMeal;
+            }
+            if (savedMealIncluded) {
+                document.getElementById('chkMealIncluded').checked = true;
+                toggleMealInclusion(true);
+            }
         }
 
         // Initialize Everything
+        renderRoomTypeDatalist();
+        renderMealTypeDatalist();
         loadSavedData();
         renderGuests();
         calculateNights();
